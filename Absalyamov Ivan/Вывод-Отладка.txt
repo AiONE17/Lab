@@ -1,0 +1,16 @@
+﻿"Absalyamov Ivan.exe" (Win32). Загружено "C:\Users\79279\Documents\GitHub\Lab\Absalyamov Ivan\Debug\Absalyamov Ivan.exe". Символы загружены.
+"Absalyamov Ivan.exe" (Win32). Загружено "C:\Windows\SysWOW64\ntdll.dll". 
+"Absalyamov Ivan.exe" (Win32). Загружено "C:\Windows\SysWOW64\kernel32.dll". 
+"Absalyamov Ivan.exe" (Win32). Загружено "C:\Windows\SysWOW64\KernelBase.dll". 
+"Absalyamov Ivan.exe" (Win32). Загружено "C:\Program Files\Avast Software\Avast\x86\aswhook.dll". 
+"Absalyamov Ivan.exe" (Win32). Загружено "C:\Windows\SysWOW64\msvcp140d.dll". 
+"Absalyamov Ivan.exe" (Win32). Загружено "C:\Windows\SysWOW64\vcruntime140d.dll". 
+"Absalyamov Ivan.exe" (Win32). Загружено "C:\Windows\SysWOW64\ucrtbased.dll". 
+Поток 0x9f8 завершился с кодом 0 (0x0).
+"Absalyamov Ivan.exe" (Win32). Загружено "C:\Windows\SysWOW64\sechost.dll". 
+"Absalyamov Ivan.exe" (Win32). Загружено "C:\Windows\SysWOW64\rpcrt4.dll". 
+"Absalyamov Ivan.exe" (Win32). Загружено "C:\Windows\SysWOW64\sspicli.dll". 
+"Absalyamov Ivan.exe" (Win32). Загружено "C:\Windows\SysWOW64\cryptbase.dll". 
+"Absalyamov Ivan.exe" (Win32). Загружено "C:\Windows\SysWOW64\bcryptprimitives.dll". 
+Поток 0xd94 завершился с кодом -1073741749 (0xc000004b).
+Программа "[14836] Absalyamov Ivan.exe" завершилась с кодом -1073741510 (0xc000013a).

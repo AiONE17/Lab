@@ -1,21 +1,20 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-//#include <string.h>
 using namespace std;
 struct KS
 {
 	int id;
 	char name[20];
-	int kol;
-	int kolvr;
+	double kol;
+	double kolvr;
 	double effect;
 };
 struct TRUBA
 {
 	int id;
-	double dl;
-	double diam;
+	int dl;
+	int diam;
 	string pr;
 };
 TRUBA CreateTRUBA()
@@ -38,13 +37,12 @@ KS CreateKS()
 {
 	KS KS1;
 	KS1.id = {};
-	cout << "Введите название ";
+	cout << "Введите название " << endl;
 	cin >> KS1.name;
-	cout << "Введите количество цехов ";
+	cout << "Введите количество цехов "<< endl;
 	cin >> KS1.kol;
-	cout << "Введите количество цехов в рабочем состоянии ";
+	cout << "Введите количество цехов в рабочем состоянии " << endl;
 	cin >> KS1.kolvr;
-	cout << "Введите эффективность ";
 	KS1.effect = 100 * KS1.kolvr / KS1.kol;
 	return KS1;
 }
@@ -61,7 +59,7 @@ void printInformKS(KS ks)
 	cout << "Название: " << ks.name << "\n";
 	cout << "Количество цехов: " << ks.kol << "\n";
 	cout << "Количество цехов в рабочем состоянии: " << ks.kolvr << "\n";
-	cout << "Эффективность: " << ks.effect << "\n";
+	cout << "Эффективность: " << round(ks.effect*100)/100 <<" %"<< "\n";
 }
 void print_menu() {
 	system("cls");  // очищаем экран
@@ -75,11 +73,6 @@ void print_menu() {
 	cout << "7. Загрузить\n";
 	cout << "0. Выход\n";
 }
-int get_variant(int count) {
-	int variant;
-	cin >> variant;
-	return variant;
-}
 
 int main()
 {
@@ -92,7 +85,7 @@ int main()
 	KS K1[amount] = {};
 	do {
 		print_menu();
-		variant = get_variant(7);
+		cin >> variant;
 		switch (variant) {
 		case 1:
 		{
@@ -204,7 +197,6 @@ int main()
 		}
 		case 7:
 		{
-
 			char filename[20];
 			int vyb;
 			cout << "Выберите\n" << "1. Загрузить трубы\n" << "2. Загрузить компрессорные станции\n";
@@ -234,7 +226,7 @@ int main()
 					myfile >> K1[p].name;
 					myfile >> K1[p].kol;
 					myfile >> K1[p].kolvr;
-					myfile >> K1[p].effect;
+					K1[p].effect = 100 * round(100 * K1[p].kolvr / K1[p].kol) / 100;
 				}
 			}
 			myfile.close();
