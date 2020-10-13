@@ -55,17 +55,6 @@ void printInformTRUBA(TRUBA truba)
 	cout << "Диаметр: " << truba.diam << "\n";
 	cout << "В ремонте: " << truba.pr << "\n";
 }
-void printInformTRUBAtxt(TRUBA truba)
-{
-	ofstream fout;
-	fout.open("file.txt", ios::app);
-	fout << "\n";
-	fout << "Идентификатор: " << truba.id << "\n";
-	fout << "Длина: " << truba.dl << "\n";
-	fout << "Диаметр: " << truba.diam << "\n";
-	fout << "В ремонте: " << truba.pr << "\n";
-	fout.close();
-}
 void printInformKS(KS ks)
 {
 	cout << "Идентификатор: " << ks.id << "\n";
@@ -73,18 +62,6 @@ void printInformKS(KS ks)
 	cout << "Количество цехов: " << ks.kol << "\n";
 	cout << "Количество цехов в рабочем состоянии: " << ks.kolvr << "\n";
 	cout << "Эффективность: " << ks.effect << "\n";
-}
-void printInformKStxt(KS ks)
-{
-	ofstream fout;
-	fout.open("file.txt", ios::app);
-	fout << "\n";
-	fout << "Идентификатор: " << ks.id << "\n";
-	fout << "Название: " << ks.name << "\n";
-	fout << "Количество цехов: " << ks.kol << "\n";
-	fout << "Количество цехов в рабочем состоянии: " << ks.kolvr << "\n";
-	fout << "Эффективность: " << ks.effect << "\n";
-	fout.close();
 }
 void print_menu() {
 	system("cls");  // очищаем экран
@@ -197,25 +174,32 @@ int main()
 		{
 			ofstream fout;
 			fout.open("file.txt");
-			if (i == 1) { fout << "ТРУБЫ ОТСУТСТВУЮТ\n"; }
+			if (i == 1) { fout << "ТРУБЫ ОТСУТСТВУЮТ\n";}
 			else {
-				fout << "ТРУБЫ\n";
+			fout << "ТРУБЫ\n";
 				for (int n = 1; n < i; n++) {
-					printInformTRUBAtxt(TR1[n]);
+					fout << endl;
+					fout << "Идентификатор: " << TR1[n].id << "\n";
+					fout << "Длина: " << TR1[n].dl << "\n";
+					fout << "Диаметр: " << TR1[n].diam << "\n";
+					fout << "В ремонте: " << TR1[n].pr << "\n";
 				}
 			}
-			fout.close();
-			fout.open("file.txt", ios::app);
 			if (k == 1) {
 				fout << "\nКОМПРЕССОРНЫЕ СТАНЦИИ ОТСУТСТВУЮТ\n";
 			}
 			else {
 				fout << "\n" << "КОМПРЕССОРНЫЕ СТАНЦИИ\n";
-				fout.close();
 				for (int n = 1; n < k; n++) {
-					printInformKStxt(K1[n]);
+					fout<<endl;
+					fout << "Идентификатор: " << K1[n].id << "\n";
+					fout << "Название: " << K1[n].name << "\n";
+					fout << "Количество цехов: " << K1[n].kol << "\n";
+					fout << "Количество цехов в рабочем состоянии: " << K1[n].kolvr << "\n";
+					fout << "Эффективность: " << K1[n].effect << "\n";
 				}
 			}
+			fout.close();
 			break;
 		}
 		case 7:
