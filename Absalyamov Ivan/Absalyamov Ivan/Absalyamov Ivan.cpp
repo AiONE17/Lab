@@ -1,11 +1,12 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
 using namespace std;
 struct KS
 {
 	int id;
-	char name[20];
+	char name;
 	double kol;
 	double kolvr;
 	double effect;
@@ -78,29 +79,32 @@ int main()
 {
 	setlocale(LC_ALL, "Russian");
 	int variant;
-	int i = 1;
-	int k = 1;
-	const int amount = 1024;
-	TRUBA TR1[amount] = {};
-	KS K1[amount] = {};
+	vector <KS> K1;
+	vector <TRUBA> TR1;
+	size_t j = 1;
+	size_t i = 1;
+	K1.resize(j);
+	TR1.resize(i);
 	do {
 		print_menu();
 		cin >> variant;
 		switch (variant) {
 		case 1:
 		{
-			TR1[i] = CreateTRUBA();
-			TR1[i].id = i;
-			printInformTRUBA(TR1[i]);
+			TR1[i - 1] = CreateTRUBA();
+			TR1[i - 1].id = i;
+			printInformTRUBA(TR1[i - 1]);
 			i++;
+			TR1.resize(i);
 			break;
 		}
 		case 2:
 		{
-			K1[k] = CreateKS();
-			K1[k].id = k;
-			printInformKS(K1[k]);
-			k++;
+			K1[j - 1] = CreateKS();
+			K1[j - 1].id = j;
+			printInformKS(K1[j - 1]);
+			j++;
+			K1.resize(j);
 			break;
 		}
 		case 3:
@@ -113,10 +117,10 @@ int main()
 					cout << "\n";
 				}
 			}
-			if (k == 1) { cout << "ÊÎÌÏÐÅÑÑÎÐÍÛÅ ÑÒÀÍÖÈÈ ÎÒÑÓÒÑÒÂÓÞÒ\n"; }
+			if (j == 1) { cout << "ÊÎÌÏÐÅÑÑÎÐÍÛÅ ÑÒÀÍÖÈÈ ÎÒÑÓÒÑÒÂÓÞÒ\n"; }
 			else {
 				cout << "ÊÎÌÏÐÅÑÑÎÐÍÛÅ ÑÒÀÍÖÈÈ\n";
-				for (int n = 1; n < k; n++) {
+				for (int n = 1; n < j; n++) {
 					printInformKS(K1[n]);
 					cout << "\n";
 				}
@@ -137,7 +141,7 @@ int main()
 		}
 		case 5:
 		{
-			if (k == 1) { cout << "ÊÎÌÏÐÅÑÑÎÐÍÛÅ ÑÒÀÍÖÈÈ ÎÒÑÓÒÑÒÂÓÞÒ\n"; }
+			if (j == 1) { cout << "ÊÎÌÏÐÅÑÑÎÐÍÛÅ ÑÒÀÍÖÈÈ ÎÒÑÓÒÑÒÂÓÞÒ\n"; }
 			else {
 				int num;
 				int mun;
@@ -178,12 +182,12 @@ int main()
 					fout << "Â ðåìîíòå: " << TR1[n].pr << "\n";
 				}
 			}
-			if (k == 1) {
+			if (j == 1) {
 				fout << "\nÊÎÌÏÐÅÑÑÎÐÍÛÅ ÑÒÀÍÖÈÈ ÎÒÑÓÒÑÒÂÓÞÒ\n";
 			}
 			else {
 				fout << "\n" << "ÊÎÌÏÐÅÑÑÎÐÍÛÅ ÑÒÀÍÖÈÈ\n";
-				for (int n = 1; n < k; n++) {
+				for (int n = 1; n < j; n++) {
 					fout<<endl;
 					fout << "Èäåíòèôèêàòîð: " << K1[n].id << "\n";
 					fout << "Íàçâàíèå: " << K1[n].name << "\n";
@@ -220,7 +224,7 @@ int main()
 				}
 			}
 			else {
-				for (p = k; myfile; p++)
+				for (p = j; myfile; p++)
 				{
 					myfile >> K1[p].id;
 					myfile >> K1[p].name;
@@ -239,9 +243,9 @@ int main()
 
 			}
 			else {
-				for (int n = k; n < p - 1; n++) {
+				for (int n = j; n < p - 1; n++) {
 					printInformKS(K1[n]);
-					k++;
+					j++;
 				}
 
 			}
