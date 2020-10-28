@@ -6,10 +6,10 @@ using namespace std;
 struct KS
 {
 	int id;
-	char name;
-	double kol;
-	double kolvr;
-	double effect;
+	string name;
+    int kol;
+	int kolvr;
+	float effect;
 };
 struct TRUBA
 {
@@ -18,33 +18,54 @@ struct TRUBA
 	int diam;
 	string pr;
 };
+float proves(float vv,float k, int k1, int k2, string s) {             //float, чтобы проверка работала и для эффективности
+	while (cin.fail() || (vv - floor(vv)) || (k > k1) || (k < k2))
+	{
+		cout << s;
+		cin.clear();
+		cin.ignore(256, '\n');
+		cin >> vv;
+		k = vv;
+	}
+	return k;
+};
 TRUBA CreateTRUBA()
 {
 	TRUBA TRUBA1;
+	double dll;
+	double diamm;
 	TRUBA1.id = {};
 	cout << "Введите длину" << endl;
-	cin >> TRUBA1.dl;
+	cin >> dll;
+	TRUBA1.dl = proves(dll,dll, 5000000, 0, "Длина должна быть целым положительным числом\n");
 	cout << "Введите диаметр" << endl;
-	cin >> TRUBA1.diam;
+	cin >> diamm;
+	TRUBA1.diam = proves(diamm,diamm, 5000000, 0, "Диаметр должен быть целым положительным числом\n");
 	cout << "В ремонте или нет (1-если в ремонте, 2-если в рабочем состоянии)" << endl;
-	int n;
+	float n;
 	cin >> n;
+	n = proves(n,n, 2, 1, "1 или 2!!!\n");
 	if (n == 1) { TRUBA1.pr = "Да"; }
 	else if (n == 2) { TRUBA1.pr = "Нет"; }
-	else { TRUBA1.pr = "Неизвестно"; };
 	return TRUBA1;
 }
 KS CreateKS()
 {
 	KS KS1;
+	double koll;
+	double kollvr;
 	KS1.id = {};
 	cout << "Введите название " << endl;
 	cin >> KS1.name;
 	cout << "Введите количество цехов "<< endl;
-	cin >> KS1.kol;
+	cin >> koll;
+	KS1.kol = proves(koll,koll,500000,0, "Количество цехов должно быть целым неотрицательным числом\n");
 	cout << "Введите количество цехов в рабочем состоянии " << endl;
-	cin >> KS1.kolvr;
-	KS1.effect = 100 * KS1.kolvr / KS1.kol;
+	cin >> kollvr;
+	KS1.kolvr = proves(kollvr,kollvr,koll,0,"Некорретное количество цехов в работе\n");
+	cout << "Введите эффективность " << endl;
+	cin >> KS1.effect;
+	KS1.effect = proves(0, KS1.effect, 100, 0, "Некорректная эффективность (от 0 до 100)\n");
 	return KS1;
 }
 void printInformTRUBA(TRUBA truba)
@@ -79,6 +100,7 @@ int main()
 {
 	setlocale(LC_ALL, "Russian");
 	int variant;
+	float vv;
 	vector <KS> K1;
 	vector <TRUBA> TR1;
 	size_t j = 1;
@@ -87,7 +109,8 @@ int main()
 	TR1.resize(i);
 	do {
 		print_menu();
-		cin >> variant;
+		cin >> vv;
+		variant = proves(vv,vv,7,0, "Действие выбрано некорректно, выберите повторно\n");
 		switch (variant) {
 		case 1:
 		{
@@ -112,7 +135,7 @@ int main()
 			if (i == 1) { cout << "ТРУБЫ ОТСУТСТВУЮТ\n"; }
 			else {
 				cout << "ТРУБЫ\n";
-				for (int n = 1; n < i; n++) {
+				for (int n = 0; n < i-1; n++) {
 					printInformTRUBA(TR1[n]);
 					cout << "\n";
 				}
@@ -120,7 +143,7 @@ int main()
 			if (j == 1) { cout << "КОМПРЕССОРНЫЕ СТАНЦИИ ОТСУТСТВУЮТ\n"; }
 			else {
 				cout << "КОМПРЕССОРНЫЕ СТАНЦИИ\n";
-				for (int n = 1; n < j; n++) {
+				for (int n = 0; n < j-1; n++) {
 					printInformKS(K1[n]);
 					cout << "\n";
 				}
@@ -131,11 +154,14 @@ int main()
 		{
 			if (i == 1) { cout << "ТРУБЫ ОТСУТСТВУЮТ\n"; }
 			else {
+				float numm;
 				int num;
 				cout << "Укажите id трубы\n";
-				cin >> num;
-				if (TR1[num].pr == "Да") { TR1[num].pr = "Нет"; }
-				else { TR1[num].pr = "Да"; }
+				cin >> numm;
+				num = proves(numm,numm, i - 1, 1, "Нет ТРУБЫ с таким id\n");
+				if (TR1[num-1].pr == "Да") { TR1[num-1].pr = "Нет"; }
+				else { TR1[num-1].pr = "Да"; }
+				cout << "Статус трубы изменен\n";
 			}
 			break;
 		}
@@ -143,26 +169,35 @@ int main()
 		{
 			if (j == 1) { cout << "КОМПРЕССОРНЫЕ СТАНЦИИ ОТСУТСТВУЮТ\n"; }
 			else {
+				float numm;
+				float munn;
 				int num;
 				int mun;
 				cout << "Укажите id КС\n";
-				cin >> num;
-				cout << "Выберите параметр\n" << "1. Название\n" << "2. Количество цехов\n" << "3. Количество цехов в рабочем состоянии\n";
-				cin >> mun;
+				cin >> numm;
+				num = proves(numm, numm, j-1, 1, "Нет КС с таким id\n");
+				cout << "Выберите параметр\n" << "1. Название\n" << "2. Количество цехов\n"<<"3. Эффективность\n";
+				cin >> munn;
+				mun = proves(munn, munn, 3, 1, "ОТ 1 ДО 3!!!\n");
 				if (mun == 1) {
 					cout << "Введите новое название\n";
-					cin >> K1[num].name;
+					cin >> K1[num-1].name;
 				}
 				else if (mun == 2) {
-					cout << "Введите новое количество цехов\n";
-					cin >> K1[num].kol;
-					K1[num].effect = K1[num].kolvr * 100 / K1[num].kol;
+					float koll;
+					float kollvr;
+					cout << "Введите новое количество цехов " << endl;
+					cin >> koll;
+					K1[num-1].kol = proves(koll,koll, 500000, 0, "Количество цехов должно быть целым неотрицательным числом\n");
+					cout << "Введите новое количество цехов в рабочем состоянии " << endl;
+					cin >> kollvr;
+					K1[num-1].kolvr = proves(kollvr, kollvr, koll, 0, "Некорретное количество цехов в работе\n");
 				}
-				else if (mun == 3)
-				{
-					cout << "Введите новое количество цехов в рабочем состоянии\n";
-					cin >> K1[num].kolvr;
-					K1[num].effect = K1[num].kolvr * 100 / K1[num].kol;
+				else {
+					float eeffect;
+					cout << "Введите новую эффективность\n";
+					cin >> eeffect;
+					K1[num - 1].effect = proves(0, eeffect, 100, 0, "Эффективность может иметь значение от 0 до 100");
 				}
 			}
 			break;
@@ -174,7 +209,7 @@ int main()
 			if (i == 1) { fout << "ТРУБЫ ОТСУТСТВУЮТ\n";}
 			else {
 			fout << "ТРУБЫ\n";
-				for (int n = 1; n < i; n++) {
+				for (int n = 0; n < i-1; n++) {
 					fout << endl;
 					fout << "Идентификатор: " << TR1[n].id << "\n";
 					fout << "Длина: " << TR1[n].dl << "\n";
@@ -187,7 +222,7 @@ int main()
 			}
 			else {
 				fout << "\n" << "КОМПРЕССОРНЫЕ СТАНЦИИ\n";
-				for (int n = 1; n < j; n++) {
+				for (int n = 0; n < j-1; n++) {
 					fout<<endl;
 					fout << "Идентификатор: " << K1[n].id << "\n";
 					fout << "Название: " << K1[n].name << "\n";
@@ -201,7 +236,7 @@ int main()
 		}
 		case 7:
 		{
-			char filename[20];
+			string filename;
 			int vyb;
 			cout << "Выберите\n" << "1. Загрузить трубы\n" << "2. Загрузить компрессорные станции\n";
 			cin >> vyb;
@@ -213,42 +248,53 @@ int main()
 				cout << "Ошибка при открытии файла.\n";
 				return 1;
 			}
-			int p;
 			if (vyb == 1) {
-				for (p = i; myfile; p++)
+				while (!myfile.eof())
 				{
-					myfile >> TR1[p].id;
-					myfile >> TR1[p].dl;
-					myfile >> TR1[p].diam;
-					myfile >> TR1[p].pr;
+					float dll=0;
+					float diamm=0;
+					float prr=0;
+					TR1[i - 1].id = i;
+					myfile >> dll;
+					myfile >> diamm;
+					myfile >> prr;
+					if ((dll - floor(dll)) || cin.fail()) { cout << "ОБРАТИТЕ ВНИМАНИЕ : Длина должна быть целым числом. ИЗМЕНИТЕ ФАЙЛОВЫЕ ВХОДНЫЕ ДАННЫЕ\n"; TR1[i - 1].dl = 0;}
+					else { TR1[i - 1].dl =(int)dll; }
+					if ((diamm - floor(diamm)) || cin.fail()) { cout << "ОБРАТИТЕ ВНИМАНИЕ : Диаметр должен быть целым числом. ИЗМЕНИТЕ ФАЙЛОВЫЕ ВХОДНЫЕ ДАННЫЕ\n"; TR1[i - 1].diam=0; }
+					else { TR1[i - 1].diam = (int)diamm; }
+					if ((prr != 1) && (prr != 2)) { cout << "ОБРАТИТЕ ВНИМАНИЕ : 1 - в ремонте, 2 - в рабочем состоянии. ИЗМЕНИТЕ ФАЙЛОВЫЕ ВХОДНЫЕ ДАННЫЕ\n"; TR1[i - 1].pr = "Неизвестно";	}
+      				else if (prr == 2) { TR1[i - 1].pr = "Нет"; }
+					else { TR1[i - 1].pr = "Да"; }
+					printInformTRUBA(TR1[i-1]);
+					cout << "\n";
+					i++;
+					TR1.resize(i);
 				}
 			}
 			else {
-				for (p = j; myfile; p++)
+				while (!myfile.eof())
 				{
-					myfile >> K1[p].id;
-					myfile >> K1[p].name;
-					myfile >> K1[p].kol;
-					myfile >> K1[p].kolvr;
-					K1[p].effect = 100 * round(100 * K1[p].kolvr / K1[p].kol) / 100;
+					float koll=0;
+					float kollvr=0;
+					float eeffect=0;
+				    K1[j-1].id = j;
+					myfile >> K1[j-1].name;
+					myfile >> koll;
+					myfile >> kollvr;
+					myfile >> eeffect;
+					if ((koll - floor(koll)) || cin.fail()) { cout << "ОБРАТИТЕ ВНИМАНИЕ : Количество цехов должно быть целым числом. ИЗМЕНИТЕ ФАЙЛОВЫЕ ВХОДНЫЕ ДАННЫЕ\n"; K1[j - 1].kol = 0; }
+					else { K1[j - 1].kol = (int)koll; }
+					if ((kollvr - floor(kollvr)) || (cin.fail())||(kollvr>koll)) { cout << "ОБРАТИТЕ ВНИМАНИЕ : Количество цехов должно быть целым числом и <= общего количества цехов. ИЗМЕНИТЕ ФАЙЛОВЫЕ ВХОДНЫЕ ДАННЫЕ\n"; K1[j - 1].kolvr = 0; }
+					else { K1[j - 1].kolvr = (int)kollvr; }
+					if ((eeffect>100)||(eeffect<0) || cin.fail()) { cout << "ОБРАТИТЕ ВНИМАНИЕ : Эффективность может иметь значения от 0 до 100. ИЗМЕНИТЕ ФАЙЛОВЫЕ ВХОДНЫЕ ДАННЫЕ\n"; K1[j - 1].effect = 0; }
+					else { K1[j - 1].effect = eeffect; }
+					printInformKS(K1[j - 1]);
+					cout << "\n";
+					j++;
+					K1.resize(j);
 				}
 			}
 			myfile.close();
-			if (vyb == 1) {
-				for (int n = i; n < p - 1; n++) {
-					printInformTRUBA(TR1[n]);
-					cout << "\n";
-					i++;
-				}
-
-			}
-			else {
-				for (int n = j; n < p - 1; n++) {
-					printInformKS(K1[n]);
-					j++;
-				}
-
-			}
 			break;
 		}
 		return 0;
