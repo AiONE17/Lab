@@ -18,81 +18,26 @@ struct TRUBA
 	int diam;
 	string pr;
 };
-int proves(float vvedchis, int nizhgran, int verhgran, string s) {
-	while (cin.fail() || (vvedchis - floor(vvedchis)) || (vvedchis > nizhgran) || (vvedchis < verhgran))
-	{
-		cout << s;
-		cin.clear();
-		cin.ignore(256, '\n');
-		cin >> vvedchis;
-	}
-	return vvedchis;
-};
-float proveofeffect(float vvedeffect, int nizhgran, int verhgran, string textoffail) {
-	while ((vvedeffect > nizhgran) || (vvedeffect < verhgran))
+int proves(int verhgran, int nizhgran, string textoffail) {
+	float vvedchis;
+	while ((cin>>vvedchis).fail() || (vvedchis - floor(vvedchis)) || (vvedchis > verhgran) || (vvedchis < nizhgran))
 	{
 		cout << textoffail;
 		cin.clear();
 		cin.ignore(256, '\n');
-		cin >> vvedeffect;
+	}
+	return vvedchis;
+};
+float proveofeffect(int verhgran, int nizhgran, string textoffail) {
+	float vvedeffect;
+	while ((cin >> vvedeffect).fail()|| (vvedeffect > verhgran) || (vvedeffect < nizhgran))
+	{
+		cout << textoffail;
+		cin.clear();
+		cin.ignore(256, '\n');
 	}
 	return vvedeffect;
 };
-TRUBA CreateTRUBA()
-{
-	TRUBA TRUBA1;
-	float dll;
-	float diamm;
-	TRUBA1.id = {};
-	cout << "Введите длину" << endl;
-	cin >> dll;
-	TRUBA1.dl = proves(dll, 5000000, 0, "Длина должна быть целым положительным числом\n");
-	cout << "Введите диаметр" << endl;
-	cin >> diamm;
-	TRUBA1.diam = proves(diamm, 5000000, 0, "Диаметр должен быть целым положительным числом\n");
-	cout << "В ремонте или нет (1-если в ремонте, 2-если в рабочем состоянии)" << endl;
-	float vybor1;
-	cin >> vybor1;
-	vybor1 = proves(vybor1, 2, 1, "1 или 2!!!\n");
-	if (vybor1 == 1) { TRUBA1.pr = "Да"; }
-	else if (vybor1 == 2) { TRUBA1.pr = "Нет"; }
-	return TRUBA1;
-}
-KS CreateKS()
-{
-	KS KS1;
-	float koll;
-	float kollvr;
-	float eeffect;
-	KS1.id = {};
-	cout << "Введите название " << endl;
-	cin >> KS1.name;
-	cout << "Введите количество цехов " << endl;
-	cin >> koll;
-	KS1.kol = proves(koll, 500000, 0, "Количество цехов должно быть целым неотрицательным числом\n");
-	cout << "Введите количество цехов в рабочем состоянии " << endl;
-	cin >> kollvr;
-	KS1.kolvr = proves(kollvr, koll, 0, "Некорретное количество цехов в работе\n");
-	cout << "Введите эффективность " << endl;
-	cin >> eeffect;
-	KS1.effect = proveofeffect(eeffect, 100, 0, "Некорректная эффективность(от 0 до 100)\n");
-	return KS1;
-}
-void printInformTRUBA(TRUBA truba)
-{
-	cout << "Идентификатор: " << truba.id << "\n";
-	cout << "Длина: " << truba.dl << "\n";
-	cout << "Диаметр: " << truba.diam << "\n";
-	cout << "В ремонте: " << truba.pr << "\n";
-}
-void printInformKS(KS ks)
-{
-	cout << "Идентификатор: " << ks.id << "\n";
-	cout << "Название: " << ks.name << "\n";
-	cout << "Количество цехов: " << ks.kol << "\n";
-	cout << "Количество цехов в рабочем состоянии: " << ks.kolvr << "\n";
-	cout << "Эффективность: " << round(ks.effect * 100) / 100 << " %" << "\n";
-}
 void print_menu() {
 	system("cls");  // очищаем экран
 	cout << "Меню\n";
@@ -127,47 +72,114 @@ void saveinformKStxt(KS ks, ofstream& fout)
 {
 	fout << ks.name << " " << ks.kol << " " << ks.kolvr << " " << ks.effect << " ";
 }
-int RedactKS(int vyb, KS ks)
+void EDITRUBA(TRUBA&truba)
 {
-	if (vyb == 1) {
-		if (ks.kolvr == ks.kol) { cout << "Все цехи находятся в рабочем состоянии\n"; }
-		else {
-			return 1;
-		}
-	}
-	else {
-		if (ks.kolvr == 0) { cout << "Нет рабочих цехов\n"; }
-		else {
-			return -1;
-		}
-	}
+	if (truba.pr == "Да") truba.pr = "Нет";
+	else truba.pr = "Да";
+	cout << "Статус трубы изменен";
 }
+void EDITKS(KS& ks)
+{
+	cout << "1. Запустить цех\n2. Остановить цех\n";
+		int vyb = proves(2, 1, "1 ИЛИ 2!");
+		if (vyb == 1) {
+			if (ks.kolvr == ks.kol) cout << "Все цехи находятся в рабочем состоянии\n"; 
+			else ks.kolvr = ks.kolvr + 1;
+		}
+		else {
+			if (ks.kolvr == 0)  cout << "Нет рабочих цехов\n"; 
+			else ks.kolvr = ks.kolvr - 1;
+		}
+}
+istream& operator >> (istream& in, TRUBA& truba)
+{
+	float dll;
+	float diamm;
+	float vybor1;
+	truba.id = {};
+	cout << "Введите длину" << endl;
+	truba.dl = proves(5000000, 0, "Длина должна быть целым положительным числом\n");
+	cout << "Введите диаметр" << endl;
+	truba.diam = proves(5000000, 0, "Диаметр должен быть целым положительным числом\n");
+	cout << "В ремонте или нет (1-если в ремонте, 2-если в рабочем состоянии)" << endl;
+	vybor1 = proves(2, 1, "1 или 2!!!\n");
+	if (vybor1 == 1) { truba.pr = "Да"; }
+	else if (vybor1 == 2) { truba.pr = "Нет"; }
+	return in;
+}
+ostream& operator << (ostream& out, const TRUBA& truba)
+{
+	out << "Идентификатор: " << truba.id << "\n";
+	out << "Длина: " << truba.dl << "\n";
+	out << "Диаметр: " << truba.diam << "\n";
+	out << "В ремонте: " << truba.pr << "\n";
+	return out;
+}
+istream& operator >> (istream& in, KS& ks)
+{
+	float koll;
+	float kollvr;
+	float eeffect;
+	ks.id = {};
+	cout << "Введите название " << endl;
+	in >> ks.name;
+	cout << "Введите количество цехов " << endl;
+	ks.kol = proves(500000, 0, "Количество цехов должно быть целым неотрицательным числом\n");
+	cout << "Введите количество цехов в рабочем состоянии " << endl;
+	ks.kolvr = proves(ks.kol, 0, "Некорретное количество цехов в работе\n");
+	cout << "Введите эффективность " << endl;
+	ks.effect = proveofeffect(100, 0, "Некорректная эффективность(от 0 до 100)\n");
+	return in;
+}
+ostream& operator << (ostream& out, const KS& ks)
+{
+	out << "Идентификатор: " << ks.id << endl;
+	out << "Название: " << ks.name << endl;
+	out << "Количество цехов: " << ks.kol << endl;
+	out << "Количество цехов в рабочем состоянии: " << ks.kolvr << endl;
+	out << "Эффективность: " << round(ks.effect * 100) / 100 << " %" << endl;
+	return out;
+}
+TRUBA& SelectTRUBA(vector<TRUBA>&g)
+{
+	cout << "Введите id\n";
+	int index = proves(g.size(), 1, "Нет трубы с таким id\n");
+	return g[index-1];
+}
+KS& SelectKS(vector<KS>&g)
+{
+	cout << "Введите id\n";
+	int index = proves(g.size(), 1, "Нет компрессорной станции с таким id");
+	return g[index - 1];
+}
+
 int main()
 {
 	setlocale(LC_ALL, "Russian");
 	int variant;
 	float vvariant;
-	KS K1;
 	int idTR = 0, idKS = 0;
-	TRUBA TR1;
+	vector <TRUBA> TRUBAS;
+	vector <KS> KSS;
 	do {
 		print_menu();
-		cin >> vvariant;
-		variant = proves(vvariant, 7, 0, "Действие выбрано некорректно, выберите повторно\n");
+		variant = proves(7, 0, "Действие выбрано некорректно, выберите повторно\n");
 		switch (variant) {
 		case 1:
 		{
-			TR1 = CreateTRUBA();
+			TRUBA TR1;
+			cin >> TR1;
 			TR1.id = idTR + 1;
-			printInformTRUBA(TR1);
+			TRUBAS.push_back(TR1);
 			idTR++;
 			break;
 		}
 		case 2:
 		{
-			K1 = CreateKS();
+			KS K1;
+			cin >> K1;
 			K1.id = idKS + 1;
-			printInformKS(K1);
+			KSS.push_back(K1);
 			idKS++;
 			break;
 		}
@@ -176,14 +188,14 @@ int main()
 			if (idTR == 0) { cout << "ТРУБЫ ОТСУТСТВУЮТ\n"; }
 			else {
 				cout << "ТРУБЫ\n";
-				printInformTRUBA(TR1);
-				cout << "\n";
+				for (TRUBA TR1 : TRUBAS)
+					cout << TR1 << endl;
 			}
 			if (idKS == 0) { cout << "КОМПРЕССОРНЫЕ СТАНЦИИ ОТСУТСТВУЮТ\n"; }
 			else {
 				cout << "КОМПРЕССОРНЫЕ СТАНЦИИ\n";
-				printInformKS(K1);
-				cout << "\n";
+				for (KS K1 : KSS)
+					cout << K1 << endl;
 			}
 			break;
 		}
@@ -191,38 +203,30 @@ int main()
 		{
 			if (idTR == 0) { cout << "ТРУБЫ ОТСУТСТВУЮТ\n"; }
 			else {
-				if (TR1.pr == "Да") { TR1.pr = "Нет"; }
-				else { TR1.pr = "Да"; }
-				cout << "Статус трубы изменен\n";
+				EDITRUBA(SelectTRUBA(TRUBAS));
 			}
 			break;
 		}
 		case 5:
 		{
-			int vybor2;
 			if (idKS == 0) { cout << "КОМПРЕССОРНЫЕ СТАНЦИИ ОТСУТСТВУЮТ\n"; }
 			else {
-				cout << "1. Запустить цех\n2. Остановить цех\n";
-				cin >> vybor2;
-				vybor2 = proves(vybor2, 2, 1, "1 ИЛИ 2!");
-				K1.kolvr = K1.kolvr + RedactKS(vybor2, K1);
+				EDITKS(SelectKS(KSS));
 			}
+			break;
 		}
 		case 6:
 		{
 			ofstream fout;
-			fout.open("file.txt");
-			if (idTR == 0) { fout << "ТРУБЫ ОТСУТСТВУЮТ\n"; }
-			else {
-				saveinformTRUBAtxt(TR1, fout);
-			}
-			if (idKS == 0) {
-				fout << "\nКОМПРЕССОРНЫЕ СТАНЦИИ ОТСУТСТВУЮТ\n";
-			}
-			else {
-				fout << "\n";
-				saveinformKStxt(K1, fout);
-			}
+			fout.open("file.txt",ios::out);
+		    if (fout.is_open())
+				{
+					for (TRUBA TR1 : TRUBAS)
+						saveinformTRUBAtxt(TR1, fout);
+					fout << endl;
+					for (KS K1 : KSS)
+						saveinformKStxt(K1, fout);
+				}
 			fout.close();
 			break;
 		}
@@ -235,15 +239,15 @@ int main()
 			ifstream myfile(filename);
 			if (myfile.is_open())
 			{
-				TR1 = loadingTR(myfile);
-				TR1.id = idTR + 1;
-				printInformTRUBA(TR1);
+	//			TR1 = loadingTR(myfile);
+	//			TR1.id = idTR + 1;
+	//			cout << TR1;
 				cout << "\n";
 				idTR++;
 				myfile.ignore(256, '\n');
-				K1 = loadingKS(myfile);
-				K1.id = idKS + 1;
-				printInformKS(K1);
+	//			K1 = loadingKS(myfile);
+	//			K1.id = idKS + 1;
+	//			cout << K1;
 				cout << "\n";
 				idKS++;
 			}
