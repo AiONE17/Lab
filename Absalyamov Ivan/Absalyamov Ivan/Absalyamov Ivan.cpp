@@ -50,17 +50,17 @@ void print_menu() {
 	cout << "7. Çàãðóçèòü\n";
 	cout << "0. Âûõîä\n";
 }
-TRUBA loadingTR(ifstream& myfile)
+TRUBA loadingTR(ifstream& myfile, int i)
 {
 	TRUBA TRUBA1;
-	TRUBA1.id = {};
+	TRUBA1.id = i;
 	myfile >> TRUBA1.dl >> TRUBA1.diam >> TRUBA1.pr;
 	return TRUBA1;
 }
-KS loadingKS(ifstream& myfile)
+KS loadingKS(ifstream& myfile, int i)
 {
 	KS KS1;
-	KS1.id = {};
+	KS1.id = i;
 	myfile >> KS1.name >> KS1.kol >> KS1.kolvr >> KS1.effect;
 	return KS1;
 }
@@ -157,8 +157,6 @@ int main()
 {
 	setlocale(LC_ALL, "Russian");
 	int variant;
-	float vvariant;
-	int idTR = 0, idKS = 0;
 	vector <TRUBA> TRUBAS;
 	vector <KS> KSS;
 	do {
@@ -169,29 +167,27 @@ int main()
 		{
 			TRUBA TR1;
 			cin >> TR1;
-			TR1.id = idTR + 1;
+			TR1.id = TRUBAS.size() + 1;
 			TRUBAS.push_back(TR1);
-			idTR++;
 			break;
 		}
 		case 2:
 		{
 			KS K1;
 			cin >> K1;
-			K1.id = idKS + 1;
+			K1.id =KSS.size() + 1;
 			KSS.push_back(K1);
-			idKS++;
 			break;
 		}
 		case 3:
 		{
-			if (idTR == 0) { cout << "ÒÐÓÁÛ ÎÒÑÓÒÑÒÂÓÞÒ\n"; }
+			if (TRUBAS.size() == 0) { cout << "ÒÐÓÁÛ ÎÒÑÓÒÑÒÂÓÞÒ\n"; }
 			else {
 				cout << "ÒÐÓÁÛ\n";
 				for (TRUBA TR1 : TRUBAS)
 					cout << TR1 << endl;
 			}
-			if (idKS == 0) { cout << "ÊÎÌÏÐÅÑÑÎÐÍÛÅ ÑÒÀÍÖÈÈ ÎÒÑÓÒÑÒÂÓÞÒ\n"; }
+			if (KSS.size() == 0) { cout << "ÊÎÌÏÐÅÑÑÎÐÍÛÅ ÑÒÀÍÖÈÈ ÎÒÑÓÒÑÒÂÓÞÒ\n"; }
 			else {
 				cout << "ÊÎÌÏÐÅÑÑÎÐÍÛÅ ÑÒÀÍÖÈÈ\n";
 				for (KS K1 : KSS)
@@ -201,7 +197,7 @@ int main()
 		}
 		case 4:
 		{
-			if (idTR == 0) { cout << "ÒÐÓÁÛ ÎÒÑÓÒÑÒÂÓÞÒ\n"; }
+			if (TRUBAS.size() == 0) { cout << "ÒÐÓÁÛ ÎÒÑÓÒÑÒÂÓÞÒ\n"; }
 			else {
 				EDITRUBA(SelectTRUBA(TRUBAS));
 			}
@@ -209,7 +205,7 @@ int main()
 		}
 		case 5:
 		{
-			if (idKS == 0) { cout << "ÊÎÌÏÐÅÑÑÎÐÍÛÅ ÑÒÀÍÖÈÈ ÎÒÑÓÒÑÒÂÓÞÒ\n"; }
+			if (KSS.size() == 0) { cout << "ÊÎÌÏÐÅÑÑÎÐÍÛÅ ÑÒÀÍÖÈÈ ÎÒÑÓÒÑÒÂÓÞÒ\n"; }
 			else {
 				EDITKS(SelectKS(KSS));
 			}
@@ -221,9 +217,11 @@ int main()
 			fout.open("file.txt",ios::out);
 		    if (fout.is_open())
 				{
+				fout << TRUBAS.size()<<" ";
 					for (TRUBA TR1 : TRUBAS)
 						saveinformTRUBAtxt(TR1, fout);
 					fout << endl;
+					fout << KSS.size()<<" ";
 					for (KS K1 : KSS)
 						saveinformKStxt(K1, fout);
 				}
@@ -232,24 +230,19 @@ int main()
 		}
 		case 7:
 		{
-			idTR = 0; idKS = 0;
-			string filename;
-			cout << "Ââåäèòå èìÿ ôàéëà: ";
-			cin >> filename;
-			ifstream myfile(filename);
+			ifstream myfile;
+			myfile.open("file.txt", ios::in);
 			if (myfile.is_open())
-			{
-	//			TR1 = loadingTR(myfile);
-	//			TR1.id = idTR + 1;
-	//			cout << TR1;
-				cout << "\n";
-				idTR++;
-				myfile.ignore(256, '\n');
-	//			K1 = loadingKS(myfile);
-	//			K1.id = idKS + 1;
-	//			cout << K1;
-				cout << "\n";
-				idKS++;
+			{ 
+				int countTR, countKS;
+				myfile >> countTR;
+				while (countTR--) {
+					TRUBAS.push_back(loadingTR(myfile,TRUBAS.size()+1));
+				}
+				myfile >> countKS;
+				while (countKS--) {
+					KSS.push_back(loadingKS(myfile, KSS.size()+1));
+				}
 			}
 			myfile.close();
 			break;
