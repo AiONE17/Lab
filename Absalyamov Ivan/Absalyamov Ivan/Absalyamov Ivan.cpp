@@ -1,43 +1,10 @@
 #include <iostream>
 #include <fstream>
-#include <string>
 #include <vector>
+#include "TRUBA.h"
+#include "KS.h"
+#include "utils.h"
 using namespace std;
-struct KS
-{
-	int id;
-	string name;
-	int kol;
-	int kolvr;
-	float effect;
-};
-struct TRUBA
-{
-	int id;
-	int dl;
-	int diam;
-	string pr;
-};
-int proves(int verhgran, int nizhgran, string textoffail) {
-	float vvedchis;
-	while ((cin>>vvedchis).fail() || (vvedchis - floor(vvedchis)) || (vvedchis > verhgran) || (vvedchis < nizhgran))
-	{
-		cout << textoffail;
-		cin.clear();
-		cin.ignore(256, '\n');
-	}
-	return vvedchis;
-};
-float proveofeffect(int verhgran, int nizhgran, string textoffail) {
-	float vvedeffect;
-	while ((cin >> vvedeffect).fail()|| (vvedeffect > verhgran) || (vvedeffect < nizhgran))
-	{
-		cout << textoffail;
-		cin.clear();
-		cin.ignore(256, '\n');
-	}
-	return vvedeffect;
-};
 void print_menu() {
 	system("cls");  // очищаем экран
 	cout << "Меню\n";
@@ -90,55 +57,6 @@ void EDITKS(KS& ks)
 			if (ks.kolvr == 0)  cout << "Нет рабочих цехов\n"; 
 			else ks.kolvr = ks.kolvr - 1;
 		}
-}
-istream& operator >> (istream& in, TRUBA& truba)
-{
-	float dll;
-	float diamm;
-	float vybor1;
-	truba.id = {};
-	cout << "Введите длину" << endl;
-	truba.dl = proves(5000000, 0, "Длина должна быть целым положительным числом\n");
-	cout << "Введите диаметр" << endl;
-	truba.diam = proves(5000000, 0, "Диаметр должен быть целым положительным числом\n");
-	cout << "В ремонте или нет (1-если в ремонте, 2-если в рабочем состоянии)" << endl;
-	vybor1 = proves(2, 1, "1 или 2!!!\n");
-	if (vybor1 == 1) { truba.pr = "Да"; }
-	else if (vybor1 == 2) { truba.pr = "Нет"; }
-	return in;
-}
-ostream& operator << (ostream& out, const TRUBA& truba)
-{
-	out << "Идентификатор: " << truba.id << "\n";
-	out << "Длина: " << truba.dl << "\n";
-	out << "Диаметр: " << truba.diam << "\n";
-	out << "В ремонте: " << truba.pr << "\n";
-	return out;
-}
-istream& operator >> (istream& in, KS& ks)
-{
-	float koll;
-	float kollvr;
-	float eeffect;
-	ks.id = {};
-	cout << "Введите название " << endl;
-	in >> ks.name;
-	cout << "Введите количество цехов " << endl;
-	ks.kol = proves(500000, 0, "Количество цехов должно быть целым неотрицательным числом\n");
-	cout << "Введите количество цехов в рабочем состоянии " << endl;
-	ks.kolvr = proves(ks.kol, 0, "Некорретное количество цехов в работе\n");
-	cout << "Введите эффективность " << endl;
-	ks.effect = proveofeffect(100, 0, "Некорректная эффективность(от 0 до 100)\n");
-	return in;
-}
-ostream& operator << (ostream& out, const KS& ks)
-{
-	out << "Идентификатор: " << ks.id << endl;
-	out << "Название: " << ks.name << endl;
-	out << "Количество цехов: " << ks.kol << endl;
-	out << "Количество цехов в рабочем состоянии: " << ks.kolvr << endl;
-	out << "Эффективность: " << round(ks.effect * 100) / 100 << " %" << endl;
-	return out;
 }
 TRUBA& SelectTRUBA(vector<TRUBA>&g)
 {
