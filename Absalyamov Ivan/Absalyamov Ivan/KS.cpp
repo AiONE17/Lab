@@ -1,5 +1,6 @@
 #include "KS.h"
 #include "utils.h"
+#include <fstream>
 using namespace std;
 istream& operator >> (istream& in, KS& ks)
 {
@@ -25,4 +26,27 @@ ostream& operator << (ostream& out, const KS& ks)
 	out << "Количество цехов в рабочем состоянии: " << ks.kolvr << endl;
 	out << "Эффективность: " << round(ks.effect * 100) / 100 << " %" << endl;
 	return out;
+}
+void saveinformKStxt(KS ks, ofstream& fout)
+{
+	fout << ks.name << " " << ks.kol << " " << ks.kolvr << " " << ks.effect << " ";
+}
+void EDITKS(KS& ks)
+{
+	cout << "1. Запустить цех\n2. Остановить цех\n";
+	int vyb = proves(2, 1, "1 ИЛИ 2!");
+	if (vyb == 1) {
+		if (ks.kolvr == ks.kol) cout << "Все цехи находятся в рабочем состоянии\n";
+		else ks.kolvr = ks.kolvr + 1;
+	}
+	else {
+		if (ks.kolvr == 0)  cout << "Нет рабочих цехов\n";
+		else ks.kolvr = ks.kolvr - 1;
+	}
+}
+ifstream& operator >> (std::ifstream& myfile, KS& KS1)
+{
+	KS1.id = 0;
+	myfile >> KS1.name >> KS1.kol >> KS1.kolvr >> KS1.effect;
+	return myfile;
 }

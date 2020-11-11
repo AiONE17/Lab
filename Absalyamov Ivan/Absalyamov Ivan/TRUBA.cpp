@@ -1,5 +1,6 @@
 #include "TRUBA.h"
 #include "utils.h"
+#include <fstream>
 using namespace std;
 istream& operator >> (istream& in, TRUBA& truba)
 {
@@ -24,4 +25,20 @@ ostream& operator << (ostream& out, const TRUBA& truba)
 	out << "Диаметр: " << truba.diam << "\n";
 	out << "В ремонте: " << truba.pr << "\n";
 	return out;
+}
+ifstream& operator >> (ifstream& myfile, TRUBA& TRUBA1)
+{
+	TRUBA1.id = 0;
+	myfile >> TRUBA1.dl >> TRUBA1.diam >> TRUBA1.pr;
+	return myfile;
+}
+void saveinformTRUBAtxt(TRUBA truba, ofstream& fout)
+{
+	fout << truba.dl << " " << truba.diam << " " << truba.pr << " ";
+}
+void EDITRUBA(TRUBA& truba)
+{
+	if (truba.pr == "Да") truba.pr = "Нет";
+	else truba.pr = "Да";
+	cout << "Статус трубы изменен";
 }

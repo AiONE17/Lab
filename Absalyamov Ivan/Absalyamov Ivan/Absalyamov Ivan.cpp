@@ -17,47 +17,6 @@ void print_menu() {
 	cout << "7. Загрузить\n";
 	cout << "0. Выход\n";
 }
-TRUBA loadingTR(ifstream& myfile, int i)
-{
-	TRUBA TRUBA1;
-	TRUBA1.id = i;
-	myfile >> TRUBA1.dl >> TRUBA1.diam >> TRUBA1.pr;
-	return TRUBA1;
-}
-KS loadingKS(ifstream& myfile, int i)
-{
-	KS KS1;
-	KS1.id = i;
-	myfile >> KS1.name >> KS1.kol >> KS1.kolvr >> KS1.effect;
-	return KS1;
-}
-void saveinformTRUBAtxt(TRUBA truba, ofstream& fout)
-{
-	fout << truba.dl << " " << truba.diam << " " << truba.pr << " ";
-}
-void saveinformKStxt(KS ks, ofstream& fout)
-{
-	fout << ks.name << " " << ks.kol << " " << ks.kolvr << " " << ks.effect << " ";
-}
-void EDITRUBA(TRUBA&truba)
-{
-	if (truba.pr == "Да") truba.pr = "Нет";
-	else truba.pr = "Да";
-	cout << "Статус трубы изменен";
-}
-void EDITKS(KS& ks)
-{
-	cout << "1. Запустить цех\n2. Остановить цех\n";
-		int vyb = proves(2, 1, "1 ИЛИ 2!");
-		if (vyb == 1) {
-			if (ks.kolvr == ks.kol) cout << "Все цехи находятся в рабочем состоянии\n"; 
-			else ks.kolvr = ks.kolvr + 1;
-		}
-		else {
-			if (ks.kolvr == 0)  cout << "Нет рабочих цехов\n"; 
-			else ks.kolvr = ks.kolvr - 1;
-		}
-}
 TRUBA& SelectTRUBA(vector<TRUBA>&g)
 {
 	cout << "Введите id\n";
@@ -155,11 +114,15 @@ int main()
 				int countTR, countKS;
 				myfile >> countTR;
 				while (countTR--) {
-					TRUBAS.push_back(loadingTR(myfile,TRUBAS.size()+1));
+					TRUBA TR;
+					myfile >> TR;
+					TRUBAS.push_back(TR);
 				}
 				myfile >> countKS;
 				while (countKS--) {
-					KSS.push_back(loadingKS(myfile, KSS.size()+1));
+					KS ks;
+					myfile >> ks;
+					KSS.push_back(ks);
 				}
 			}
 			myfile.close();
