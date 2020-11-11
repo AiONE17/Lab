@@ -10,11 +10,15 @@ void print_menu() {
 	cout << "Меню\n";
 	cout << "1. Добавить трубу\n";
 	cout << "2. Добавить КС\n";
-	cout << "3. Просмотр всех объектов\n";
-	cout << "4. Редактировать трубу\n";
-	cout << "5. Редактировать КС\n";
-	cout << "6. Сохранить\n";
-	cout << "7. Загрузить\n";
+	cout << "3. Удалить трубу\n";
+	cout << "4. Удалить КС\n";
+	cout << "5. Просмотр всех объектов\n";
+	cout << "6. Редактировать трубу\n";
+	cout << "7. Редактировать КС\n";
+	cout << "8. Поиск трубы по фильтру\n";
+	cout << "9. Поиск КС по фильтру\n";
+	cout << "10. Сохранить\n";
+	cout << "11. Загрузить\n";
 	cout << "0. Выход\n";
 }
 TRUBA& SelectTRUBA(vector<TRUBA>&g)
@@ -29,6 +33,51 @@ KS& SelectKS(vector<KS>&g)
 	int index = proves(g.size(), 1, "Нет компрессорной станции с таким id");
 	return g[index - 1];
 }
+using FilterTR = bool(*)(const TRUBA& t, string param);
+bool CheckbyNameTR(const TRUBA& t, string param)
+{
+	return t.name == param;
+}
+bool CheckbyPr(const TRUBA& t, string param)
+{
+	return t.pr == param;
+}
+vector <int> FindTRUBAbyFilter(const vector <TRUBA>& TRUBAS, FilterTR f, string param)
+{
+	vector <int> res;
+	int i = 0;
+	for (auto& t : TRUBAS)
+	{
+		if (f(t, param))
+			res.push_back(i);
+		i++;
+	}
+	return res;
+}
+
+template <typename T>
+using FilterKS = bool(*)(const KS& k, T param);
+bool CheckbyNameKS(const KS& k, string param)
+{
+	return k.name == param;
+}
+bool CheckPercent(const KS& k, float param)
+{
+	return k.percent == param;
+}
+template <typename T>
+vector <int> FindKSbyFilter(const vector <KS>& KSS, FilterKS<T> f, T param)
+{
+	vector <int> res;
+	int i = 0;
+	for (auto& k : KSS)
+	{
+		if (f(k, param))
+			res.push_back(i);
+		i++;
+	}
+	return res;
+}
 
 int main()
 {
@@ -38,13 +87,12 @@ int main()
 	vector <KS> KSS;
 	do {
 		print_menu();
-		variant = proves(7, 0, "Действие выбрано некорректно, выберите повторно\n");
+		variant = proves(11, 0, "Действие выбрано некорректно, выберите повторно\n");
 		switch (variant) {
 		case 1:
 		{
 			TRUBA TR1;
 			cin >> TR1;
-			TR1.id = TRUBAS.size() + 1;
 			TRUBAS.push_back(TR1);
 			break;
 		}
@@ -52,11 +100,28 @@ int main()
 		{
 			KS K1;
 			cin >> K1;
-			K1.id =KSS.size() + 1;
 			KSS.push_back(K1);
 			break;
 		}
 		case 3:
+		{
+			int id;
+			cout << "Введите id трубы" << endl;
+			cin >> id;
+		    PREP4DELTR(TRUBAS,id);
+			TRUBAS.pop_back();
+			break;
+		}
+		case 4:
+		{
+			int id;
+			cout << "Введите id КС" << endl;
+			cin >> id;
+			PREP4DELKS(KSS, id);
+			KSS.pop_back();
+			break;
+		}
+		case 5:
 		{
 			if (TRUBAS.size() == 0) { cout << "ТРУБЫ ОТСУТСТВУЮТ\n"; }
 			else {
@@ -72,7 +137,7 @@ int main()
 			}
 			break;
 		}
-		case 4:
+		case 6:
 		{
 			if (TRUBAS.size() == 0) { cout << "ТРУБЫ ОТСУТСТВУЮТ\n"; }
 			else {
@@ -80,7 +145,7 @@ int main()
 			}
 			break;
 		}
-		case 5:
+		case 7:
 		{
 			if (KSS.size() == 0) { cout << "КОМПРЕССОРНЫЕ СТАНЦИИ ОТСУТСТВУЮТ\n"; }
 			else {
@@ -88,10 +153,53 @@ int main()
 			}
 			break;
 		}
-		case 6:
+		case 8:
 		{
-			ofstream fout;
-			fout.open("file.txt",ios::out);
+			cout << "1. Поиск по названию\n" << "2. Поиск по признаку в ремонте\n";
+			int vybor3 = proves(2, 1, "1 или 2!");
+			if (vybor3 == 1) {
+				string name;
+				cout << "Введите название трубы" << endl;
+				cin >> name;
+				for (int i : FindTRUBAbyFilter(TRUBAS, CheckbyNameTR, name))
+					cout << TRUBAS[i] << endl;
+			}
+			else {
+				string pr;
+				cout << "Yes - труба в ремонте/No - не в ремонте" << endl;
+				cin >> pr;
+				for (int i : FindTRUBAbyFilter(TRUBAS, CheckbyPr, pr))
+					cout << TRUBAS[i] << endl;
+			}
+			break;
+
+		}
+		case 9:
+		{
+			cout << "1. Поиск по названию\n" << "2. Поиск по проценту незадействованных цехов\n";
+			int vybor4 = proves(2, 1, "1 или 2!");
+			if (vybor4 == 1) {
+				string name;
+				cout << "Введите название КС" << endl;
+				cin >> name;
+				for (int i : FindKSbyFilter(KSS, CheckbyNameKS, name))
+					cout << KSS[i]<<endl;
+			}
+			else {
+				float percent;
+				cout << "Введите процент" << endl;
+				cin >> percent;
+				for (int i : FindKSbyFilter(KSS, CheckPercent, percent))
+					cout << KSS[i]<<endl;
+			}
+			break;
+		}
+		case 10:
+		{
+			string filename;
+			cout << "Введите название файла\n";
+			cin >> filename;
+			ofstream fout(filename);
 		    if (fout.is_open())
 				{
 				fout << TRUBAS.size()<<" ";
@@ -105,10 +213,14 @@ int main()
 			fout.close();
 			break;
 		}
-		case 7:
+		case 11:
 		{
-			ifstream myfile;
-			myfile.open("file.txt", ios::in);
+			TRUBAS.clear();
+			KSS.clear();
+			string filename;
+			cout << "Введите название файла\n";
+			cin >> filename;
+			ifstream myfile(filename);
 			if (myfile.is_open())
 			{ 
 				int countTR, countKS;

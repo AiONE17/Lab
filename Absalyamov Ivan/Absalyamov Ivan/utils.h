@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include "TRUBA.h"
 inline int proves(int verhgran, int nizhgran, std::string textoffail) {
 	float vvedchis;
 	while ((std::cin >> vvedchis).fail() || (vvedchis - floor(vvedchis)) || (vvedchis > verhgran) || (vvedchis < nizhgran))
@@ -19,4 +20,4 @@ inline float proveofeffect(int verhgran, int nizhgran, std::string textoffail) {
 		std::cin.ignore(256, '\n');
 	}
 	return vvedeffect;
-};
+}

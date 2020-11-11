@@ -2,12 +2,13 @@
 #include "utils.h"
 #include <fstream>
 using namespace std;
+int KS::MaxID = 1;
+KS::KS()
+{
+	id = MaxID++;
+}
 istream& operator >> (istream& in, KS& ks)
 {
-	float koll;
-	float kollvr;
-	float eeffect;
-	ks.id = {};
 	cout << "Введите название " << endl;
 	in >> ks.name;
 	cout << "Введите количество цехов " << endl;
@@ -16,6 +17,7 @@ istream& operator >> (istream& in, KS& ks)
 	ks.kolvr = proves(ks.kol, 0, "Некорретное количество цехов в работе\n");
 	cout << "Введите эффективность " << endl;
 	ks.effect = proveofeffect(100, 0, "Некорректная эффективность(от 0 до 100)\n");
+	ks.percent = 100-100*(ks.kol - ks.kolvr) / ks.kol;
 	return in;
 }
 ostream& operator << (ostream& out, const KS& ks)
@@ -44,9 +46,25 @@ void EDITKS(KS& ks)
 		else ks.kolvr = ks.kolvr - 1;
 	}
 }
-ifstream& operator >> (std::ifstream& myfile, KS& KS1)
+ifstream& operator >> (std::ifstream& myfile, KS& ks)
 {
-	KS1.id = 0;
-	myfile >> KS1.name >> KS1.kol >> KS1.kolvr >> KS1.effect;
+	myfile >> ks.name >> ks.kol >> ks.kolvr >> ks.effect;
+	ks.percent = 100 * (ks.kol - ks.kolvr) / ks.kol;
 	return myfile;
+}
+void PREP4DELKS(vector <KS>& KSS, int id)
+{
+	int i = 0;
+	for (auto& t : KSS)
+	{
+		if (t.id == id)
+		{
+			swap(KSS[i].name, KSS[KSS.size() - 1].name);
+			swap(KSS[i].kol, KSS[KSS.size() - 1].kol);
+			swap(KSS[i].kolvr, KSS[KSS.size() - 1].kolvr);
+			swap(KSS[i].effect, KSS[KSS.size() - 1].effect);
+		}
+		i++;
+	}
+
 }
