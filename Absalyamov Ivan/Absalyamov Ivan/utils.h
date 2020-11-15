@@ -3,7 +3,7 @@
 #include "TRUBA.h"
 inline int proves(int verhgran, int nizhgran, std::string textoffail) {
 	float vvedchis;
-	while ((std::cin >> vvedchis).fail() || (vvedchis - floor(vvedchis)) || (vvedchis > verhgran) || (vvedchis < nizhgran))
+	while ((std::cin >> vvedchis).fail() || (vvedchis - floor(vvedchis)) || (vvedchis > verhgran) || (vvedchis < nizhgran)&&(vvedchis!=0))
 	{
 		std::cout << textoffail;
 		std::cin.clear();

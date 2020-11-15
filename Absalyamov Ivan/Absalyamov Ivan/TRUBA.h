@@ -17,7 +17,10 @@ public:
 	friend std::ifstream& operator >> (std::ifstream& myfile, TRUBA& TRUBA1);
 	friend void saveinformTRUBAtxt(TRUBA truba, std::ofstream& fout);
 	friend void EDITRUBA(TRUBA& truba);
-	friend void PREP4DELTR(std::vector <TRUBA>& TRUBAS, int id);
+	friend void PREP4DELTR(std::vector <TRUBA>& TRUBAS);
+	friend std::pair <int, TRUBA&> SelectTRUBA(std::vector<TRUBA>& g);
+	friend void knopkaEDITTR(std::vector <TRUBA>& g);
+	friend void POTeditTR1(std::vector <TRUBA>& TRUBAS);
 	TRUBA();
 };
 

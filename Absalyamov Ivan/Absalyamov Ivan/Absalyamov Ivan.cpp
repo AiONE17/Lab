@@ -4,7 +4,8 @@
 #include "TRUBA.h"
 #include "KS.h"
 #include "utils.h"
-using namespace std;
+#include <utility>
+using namespace std; 
 void print_menu() {
 	system("cls");  // очищаем экран
 	cout << "Меню\n";
@@ -17,21 +18,11 @@ void print_menu() {
 	cout << "7. Редактировать КС\n";
 	cout << "8. Поиск трубы по фильтру\n";
 	cout << "9. Поиск КС по фильтру\n";
-	cout << "10. Сохранить\n";
-	cout << "11. Загрузить\n";
+	cout << "10. Пакетное редактирование ТРУБ\n";
+	cout << "11. Пакетное редактирование КС\n";
+	cout << "12. Сохранить\n";
+	cout << "13. Загрузить\n";
 	cout << "0. Выход\n";
-}
-TRUBA& SelectTRUBA(vector<TRUBA>&g)
-{
-	cout << "Введите id\n";
-	int index = proves(g.size(), 1, "Нет трубы с таким id\n");
-	return g[index-1];
-}
-KS& SelectKS(vector<KS>&g)
-{
-	cout << "Введите id\n";
-	int index = proves(g.size(), 1, "Нет компрессорной станции с таким id");
-	return g[index - 1];
 }
 using FilterTR = bool(*)(const TRUBA& t, string param);
 bool CheckbyNameTR(const TRUBA& t, string param)
@@ -54,7 +45,6 @@ vector <int> FindTRUBAbyFilter(const vector <TRUBA>& TRUBAS, FilterTR f, string 
 	}
 	return res;
 }
-
 template <typename T>
 using FilterKS = bool(*)(const KS& k, T param);
 bool CheckbyNameKS(const KS& k, string param)
@@ -78,6 +68,66 @@ vector <int> FindKSbyFilter(const vector <KS>& KSS, FilterKS<T> f, T param)
 	}
 	return res;
 }
+void POTeditTR2(vector <TRUBA>& TRUBAS)
+{
+	cout << "1. Поиск по названию\n" << "2. Поиск по признаку в ремонте\n";
+	int vybor3 = proves(2, 1, "1 или 2!");
+	if (vybor3 == 1) {
+		string name;
+		cout << "Введите название трубы" << endl;
+		cin >> name;
+		for (int i : FindTRUBAbyFilter(TRUBAS, CheckbyNameTR, name))
+			EDITRUBA(TRUBAS[i]);
+	}
+	else {
+		string pr;
+		cout << "Yes - труба в ремонте/No - не в ремонте" << endl;
+		cin >> pr;
+		for (int i : FindTRUBAbyFilter(TRUBAS, CheckbyPr, pr)) {
+			EDITRUBA(TRUBAS[i]);
+		}
+	}
+}
+void POTeditKS3(vector <KS>& KSS)
+{
+	cout << "1. Поиск по названию\n" << "2. Поиск по проценту незадействованных цехов\n";
+	int vybor4 = proves(2, 1, "1 или 2!");
+	if (vybor4 == 1) {
+		string name;
+		cout << "Введите название КС" << endl;
+		cin >> name;
+		for (int i : FindKSbyFilter(KSS, CheckbyNameKS, name))
+			EDITKSPLUS(KSS[i]);
+	}
+	else {
+		float percent;
+		cout << "Введите процент" << endl;
+		cin >> percent;
+		for (int i : FindKSbyFilter(KSS, CheckPercent, percent))
+			EDITKSPLUS(KSS[i]);
+	}
+
+}
+void POTeditKS4(vector <KS>& KSS)
+{
+	cout << "1. Поиск по названию\n" << "2. Поиск по проценту незадействованных цехов\n";
+	int vybor4 = proves(2, 1, "1 или 2!");
+	if (vybor4 == 1) {
+		string name;
+		cout << "Введите название КС" << endl;
+		cin >> name;
+		for (int i : FindKSbyFilter(KSS, CheckbyNameKS, name))
+			EDITKSMINUS(KSS[i]);
+	}
+	else {
+		float percent;
+		cout << "Введите процент" << endl;
+		cin >> percent;
+		for (int i : FindKSbyFilter(KSS, CheckPercent, percent))
+			EDITKSMINUS(KSS[i]);
+	}
+}
+
 
 int main()
 {
@@ -87,7 +137,7 @@ int main()
 	vector <KS> KSS;
 	do {
 		print_menu();
-		variant = proves(11, 0, "Действие выбрано некорректно, выберите повторно\n");
+		variant = proves(13, 0, "Действие выбрано некорректно, выберите повторно\n");
 		switch (variant) {
 		case 1:
 		{
@@ -105,20 +155,16 @@ int main()
 		}
 		case 3:
 		{
-			int id;
-			cout << "Введите id трубы" << endl;
-			cin >> id;
-		    PREP4DELTR(TRUBAS,id);
-			TRUBAS.pop_back();
+			if (TRUBAS.size() == 0)  cout << "ТРУБЫ ОТСУТСТВУЮТ\n";
+			else
+		    PREP4DELTR(TRUBAS);
 			break;
 		}
 		case 4:
 		{
-			int id;
-			cout << "Введите id КС" << endl;
-			cin >> id;
-			PREP4DELKS(KSS, id);
-			KSS.pop_back();
+			if (KSS.size() == 0)  cout << "ТРУБЫ ОТСУТСТВУЮТ\n"; 
+			else 
+			PREP4DELKS(KSS);
 			break;
 		}
 		case 5:
@@ -139,17 +185,17 @@ int main()
 		}
 		case 6:
 		{
-			if (TRUBAS.size() == 0) { cout << "ТРУБЫ ОТСУТСТВУЮТ\n"; }
+			if (TRUBAS.size() == 0)  cout << "ТРУБЫ ОТСУТСТВУЮТ\n";
 			else {
-				EDITRUBA(SelectTRUBA(TRUBAS));
+				knopkaEDITTR(TRUBAS);
 			}
 			break;
 		}
 		case 7:
 		{
-			if (KSS.size() == 0) { cout << "КОМПРЕССОРНЫЕ СТАНЦИИ ОТСУТСТВУЮТ\n"; }
+			if (KSS.size() == 0)  cout << "КС ОТСУТСТВУЮТ\n";
 			else {
-				EDITKS(SelectKS(KSS));
+				knopkaEDITKS(KSS);
 			}
 			break;
 		}
@@ -168,8 +214,9 @@ int main()
 				string pr;
 				cout << "Yes - труба в ремонте/No - не в ремонте" << endl;
 				cin >> pr;
-				for (int i : FindTRUBAbyFilter(TRUBAS, CheckbyPr, pr))
+				for (int i : FindTRUBAbyFilter(TRUBAS, CheckbyPr, pr)) {
 					cout << TRUBAS[i] << endl;
+				}
 			}
 			break;
 
@@ -196,6 +243,39 @@ int main()
 		}
 		case 10:
 		{
+			if (TRUBAS.size() == 0)  cout << "ТРУБЫ ОТСУТСТВУЮТ\n";
+			else {
+				cout << "1. Выбрать трубы самостоятельно\n" << "2. Выбрать трубы через фильтр\n";
+				int vybor5 = proves(2, 1, "1 ИЛИ 2!");
+				if (vybor5 == 1)
+					POTeditTR1(TRUBAS);
+				else {
+					POTeditTR2(TRUBAS);
+				}
+			}
+			break;
+		}
+		case 11:
+		{
+			if (KSS.size() == 0)  cout << "КС ОТСУТСТВУЮТ\n";
+			else {
+				cout << "1. Запустить КС\n" << "2. Остановить КС\n";
+				int vybor5 = proves(2, 1, "1 или 2!");
+				cout << "1. Выбрать КС самостоятельно\n" << "2. Выбрать КС через фильтр\n";
+				int vybor6 = proves(2, 1, "1 ИЛИ 2!");
+				if ((vybor5 == 1) && (vybor6 == 1))
+					POTeditKS1(KSS);
+				else if ((vybor5 == 2) && (vybor6 == 1))
+					POTeditKS2(KSS);
+				else if ((vybor5 == 1) && (vybor6 == 2))
+					POTeditKS3(KSS);
+				else if ((vybor5 == 2) && (vybor6 == 2))
+					POTeditKS4(KSS);
+			}
+				break;
+		}
+		case 12:
+		{
 			string filename;
 			cout << "Введите название файла\n";
 			cin >> filename;
@@ -213,7 +293,7 @@ int main()
 			fout.close();
 			break;
 		}
-		case 11:
+		case 13:
 		{
 			TRUBAS.clear();
 			KSS.clear();
@@ -222,7 +302,7 @@ int main()
 			cin >> filename;
 			ifstream myfile(filename);
 			if (myfile.is_open())
-			{ 
+			{
 				int countTR, countKS;
 				myfile >> countTR;
 				while (countTR--) {
@@ -237,6 +317,7 @@ int main()
 					KSS.push_back(ks);
 				}
 			}
+			else cout << "Ошибка при чтении\n";
 			myfile.close();
 			break;
 		}

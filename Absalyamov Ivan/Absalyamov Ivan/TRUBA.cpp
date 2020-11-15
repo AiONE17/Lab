@@ -42,25 +42,56 @@ void saveinformTRUBAtxt(TRUBA truba, ofstream& fout)
 }
 void EDITRUBA(TRUBA& truba)
 {
-	if (truba.pr == "Да") truba.pr = "Нет";
-	else truba.pr = "Да";
-	cout << "Статус трубы изменен";
+	if (truba.pr == "Yes") truba.pr = "No";
+	else truba.pr = "Yes";
+	cout << "Статус трубы изменен\n";
 }
-void PREP4DELTR(vector <TRUBA>& TRUBAS, int id)
+void PREP4DELTR(vector <TRUBA>& TRUBAS)
 {
+	cout << "Введите id трубы (Введите 0, если хотите выйти в меню)\n";
+	int id = proves(TRUBAS.size(), 1, "Нет трубы с таким id (Введите 0, если хотите выйти в меню)\n");
 	int i = 0;
-	for (auto& t : TRUBAS)
-	{
-		if (t.id == id)
+	if (id != 0) {
+		for (auto& t : TRUBAS)
 		{
-			swap(TRUBAS[i].name, TRUBAS[TRUBAS.size() - 1].name);
-			swap(TRUBAS[i].dl, TRUBAS[TRUBAS.size() - 1].dl);
-			swap(TRUBAS[i].diam, TRUBAS[TRUBAS.size() - 1].diam);
-			swap(TRUBAS[i].pr, TRUBAS[TRUBAS.size() - 1].pr);
-			
+			if (t.id == id)
+			{
+				swap(TRUBAS[i].name, TRUBAS[TRUBAS.size() - 1].name);
+				swap(TRUBAS[i].dl, TRUBAS[TRUBAS.size() - 1].dl);
+				swap(TRUBAS[i].diam, TRUBAS[TRUBAS.size() - 1].diam);
+				swap(TRUBAS[i].pr, TRUBAS[TRUBAS.size() - 1].pr);
+			}
+			i++;
 		}
-		i++;
+		TRUBAS.pop_back();
 	}
-
+}
+pair <int, TRUBA&> SelectTRUBA(vector<TRUBA>& g)
+{
+	cout << "Введите id (Введите 0, если хотите выйти в меню)\n";
+	int index = proves(g.size(), 1, "Нет трубы с таким id (Введите 0, если хотите выйти в меню)\n");
+	if (index == 0) return{ index, g[0] };
+	else
+		return { index,g[index - 1] };
+}
+void knopkaEDITTR(vector <TRUBA>& g)
+{
+	pair <int, TRUBA&> ATR = SelectTRUBA(g);
+	if (ATR.first != 0) {
+		EDITRUBA(ATR.second);
+		g[ATR.first - 1] = ATR.second;
+	}
+}
+void POTeditTR1(vector <TRUBA>& TRUBAS)
+{
+	int flag = 1;
+	do {
+		pair <int, TRUBA&> ATR = SelectTRUBA(TRUBAS);
+		if (ATR.first != 0) {
+			EDITRUBA(ATR.second);
+			TRUBAS[ATR.first - 1] = ATR.second;
+		}
+		flag = ATR.first;
+	} while (flag != 0);
 }
 
