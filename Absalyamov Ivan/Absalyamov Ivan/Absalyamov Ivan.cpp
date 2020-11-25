@@ -1,10 +1,10 @@
 #include <iostream>
+#include <string>
 #include <fstream>
 #include <vector>
 #include "TRUBA.h"
 #include "KS.h"
 #include "utils.h"
-#include <utility>
 using namespace std; 
 void print_menu() {
 	system("cls");  // очищаем экран
@@ -127,13 +127,11 @@ void POTeditKS4(vector <KS>& KSS)
 			EDITKSMINUS(KSS[i]);
 	}
 }
-
-
 int main()
 {
 	setlocale(LC_ALL, "Russian");
 	int variant;
-	vector <TRUBA> TRUBAS;
+    vector <TRUBA> TRUBAS;
 	vector <KS> KSS;
 	do {
 		print_menu();
@@ -201,21 +199,23 @@ int main()
 		}
 		case 8:
 		{
-			cout << "1. Поиск по названию\n" << "2. Поиск по признаку в ремонте\n";
-			int vybor3 = proves(2, 1, "1 или 2!");
-			if (vybor3 == 1) {
-				string name;
-				cout << "Введите название трубы" << endl;
-				cin >> name;
-				for (int i : FindTRUBAbyFilter(TRUBAS, CheckbyNameTR, name))
-					cout << TRUBAS[i] << endl;
-			}
+			if (TRUBAS.size() == 0)  cout << "ТРУБЫ ОТСУТСТВУЮТ\n";
 			else {
-				string pr;
-				cout << "Yes - труба в ремонте/No - не в ремонте" << endl;
-				cin >> pr;
-				for (int i : FindTRUBAbyFilter(TRUBAS, CheckbyPr, pr)) {
-					cout << TRUBAS[i] << endl;
+				cout << "1. Поиск по названию\n" << "2. Поиск по признаку в ремонте\n";
+				int vybor3 = proves(2, 1, "1 или 2!");
+				if (vybor3 == 1) {
+					string name;
+					cout << "Введите название трубы" << endl;
+					cin >> name;
+					for (int i : FindTRUBAbyFilter(TRUBAS, CheckbyNameTR, name))
+						cout << TRUBAS[i] << endl;
+				}
+				else {
+					string pr;
+					cout << "Yes - труба в ремонте/No - не в ремонте" << endl;
+					cin >> pr;
+					for (int i : FindTRUBAbyFilter(TRUBAS, CheckbyPr, pr))
+						cout << TRUBAS[i] << endl;
 				}
 			}
 			break;
@@ -223,21 +223,24 @@ int main()
 		}
 		case 9:
 		{
-			cout << "1. Поиск по названию\n" << "2. Поиск по проценту незадействованных цехов\n";
-			int vybor4 = proves(2, 1, "1 или 2!");
-			if (vybor4 == 1) {
-				string name;
-				cout << "Введите название КС" << endl;
-				cin >> name;
-				for (int i : FindKSbyFilter(KSS, CheckbyNameKS, name))
-					cout << KSS[i]<<endl;
-			}
+			if (KSS.size() == 0)  cout << "КС ОТСУТСТВУЮТ\n";
 			else {
-				float percent;
-				cout << "Введите процент" << endl;
-				cin >> percent;
-				for (int i : FindKSbyFilter(KSS, CheckPercent, percent))
-					cout << KSS[i]<<endl;
+				cout << "1. Поиск по названию\n" << "2. Поиск по проценту незадействованных цехов\n";
+				int vybor4 = proves(2, 1, "1 или 2!");
+				if (vybor4 == 1) {
+					string name;
+					cout << "Введите название КС" << endl;
+					cin >> name;
+					for (int i : FindKSbyFilter(KSS, CheckbyNameKS, name))
+						cout << KSS[i] << endl;
+				}
+				else {
+					float percent;
+					cout << "Введите процент" << endl;
+					cin >> percent;
+					for (int i : FindKSbyFilter(KSS, CheckPercent, percent))
+						cout << KSS[i] << endl;
+				}
 			}
 			break;
 		}
@@ -249,9 +252,8 @@ int main()
 				int vybor5 = proves(2, 1, "1 ИЛИ 2!");
 				if (vybor5 == 1)
 					POTeditTR1(TRUBAS);
-				else {
+				else 
 					POTeditTR2(TRUBAS);
-				}
 			}
 			break;
 		}

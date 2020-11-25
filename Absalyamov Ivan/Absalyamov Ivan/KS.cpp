@@ -1,6 +1,7 @@
 #include "KS.h"
 #include "utils.h"
 #include <fstream>
+#include <iostream>
 using namespace std;
 int KS::MaxID = 1;
 KS::KS()
@@ -64,7 +65,7 @@ ifstream& operator >> (std::ifstream& myfile, KS& ks)
 void PREP4DELKS(vector <KS>& KSS)
 {
 	cout << "Введите id КС (Введите 0, если хотите выйти в меню)\n";
-	int id = proves(KSS.size(), 1, "Нет КС с таким id (Введите 0, если хотите выйти в меню)\n");
+	int id = proves3(KSS.size(), 1, "Нет КС с таким id (Введите 0, если хотите выйти в меню)\n");
 	int i = 0;
 	if (id != 0) {
 		for (auto& t : KSS)
@@ -91,7 +92,7 @@ void knopkaEDITKS(vector <KS>& g)
 pair <int, KS&> SelectKS(vector<KS>& g)
 {
 	cout << "Введите id (Введите 0, если хотите выйти в меню)\n";
-	int index = proves(g.size(), 1, "Нет трубы с таким id (Введите 0, если хотите выйти в меню)\n");
+	int index = proves3(g.size(), 1, "Нет трубы с таким id (Введите 0, если хотите выйти в меню)\n");
 	if (index == 0) return{ index, g[0] };
 	else
 		return { index,g[index - 1] };

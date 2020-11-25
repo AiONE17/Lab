@@ -49,7 +49,7 @@ void EDITRUBA(TRUBA& truba)
 void PREP4DELTR(vector <TRUBA>& TRUBAS)
 {
 	cout << "Введите id трубы (Введите 0, если хотите выйти в меню)\n";
-	int id = proves(TRUBAS.size(), 1, "Нет трубы с таким id (Введите 0, если хотите выйти в меню)\n");
+	int id = proves3(TRUBAS.size(), 1, "Нет трубы с таким id (Введите 0, если хотите выйти в меню)\n");
 	int i = 0;
 	if (id != 0) {
 		for (auto& t : TRUBAS)
@@ -69,7 +69,7 @@ void PREP4DELTR(vector <TRUBA>& TRUBAS)
 pair <int, TRUBA&> SelectTRUBA(vector<TRUBA>& g)
 {
 	cout << "Введите id (Введите 0, если хотите выйти в меню)\n";
-	int index = proves(g.size(), 1, "Нет трубы с таким id (Введите 0, если хотите выйти в меню)\n");
+	int index = proves3(g.size(), 1, "Нет трубы с таким id (Введите 0, если хотите выйти в меню)\n");
 	if (index == 0) return{ index, g[0] };
 	else
 		return { index,g[index - 1] };
