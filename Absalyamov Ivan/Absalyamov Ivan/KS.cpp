@@ -64,29 +64,35 @@ ifstream& operator >> (std::ifstream& myfile, KS& ks)
 }
 void PREP4DELKS(vector <KS>& KSS)
 {
-	cout << "Введите id КС (Введите 0, если хотите выйти в меню)\n";
-	int id = proves3(KSS.size(), 1, "Нет КС с таким id (Введите 0, если хотите выйти в меню)\n");
-	int i = 0;
-	if (id != 0) {
-		for (auto& t : KSS)
-		{
-			if (id != 0) {
-				swap(KSS[i].name, KSS[KSS.size() - 1].name);
-				swap(KSS[i].kol, KSS[KSS.size() - 1].kol);
-				swap(KSS[i].kolvr, KSS[KSS.size() - 1].kolvr);
-				swap(KSS[i].effect, KSS[KSS.size() - 1].effect);
+	if (KSS.size() == 0)  cout << "ТРУБЫ ОТСУТСТВУЮТ\n";
+	else {
+		cout << "Введите id КС (Введите 0, если хотите выйти в меню)\n";
+		int id = proves3(KSS.size(), 1, "Нет КС с таким id (Введите 0, если хотите выйти в меню)\n");
+		int i = 0;
+		if (id != 0) {
+			for (auto& t : KSS)
+			{
+				if (id != 0) {
+					swap(KSS[i].name, KSS[KSS.size() - 1].name);
+					swap(KSS[i].kol, KSS[KSS.size() - 1].kol);
+					swap(KSS[i].kolvr, KSS[KSS.size() - 1].kolvr);
+					swap(KSS[i].effect, KSS[KSS.size() - 1].effect);
+				}
+				i++;
 			}
-			i++;
+			KSS.pop_back();
 		}
-		KSS.pop_back();
 	}
 }
 void knopkaEDITKS(vector <KS>& g)
 {
-	pair <int, KS&> ATR = SelectKS(g);
-	if (ATR.first != 0) {
-		EDITKS(ATR.second);
-		g[ATR.first - 1] = ATR.second;
+	if (g.size() == 0)  cout << "КС ОТСУТСТВУЮТ\n";
+	else {
+		pair <int, KS&> ATR = SelectKS(g);
+		if (ATR.first != 0) {
+			EDITKS(ATR.second);
+			g[ATR.first - 1] = ATR.second;
+		}
 	}
 }
 pair <int, KS&> SelectKS(vector<KS>& g)

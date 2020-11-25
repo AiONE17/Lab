@@ -127,6 +127,81 @@ void POTeditKS4(vector <KS>& KSS)
 			EDITKSMINUS(KSS[i]);
 	}
 }
+void PaketEDitKS(vector <KS>& KSS)
+{
+	if (KSS.size() == 0)  cout << "ÊÑ ÎÒÑÓÒÑÒÂÓÞÒ\n";
+	else {
+		cout << "1. Çàïóñòèòü ÊÑ\n" << "2. Îñòàíîâèòü ÊÑ\n";
+		int vybor5 = proves(2, 1, "1 èëè 2!");
+		cout << "1. Âûáðàòü ÊÑ ñàìîñòîÿòåëüíî\n" << "2. Âûáðàòü ÊÑ ÷åðåç ôèëüòð\n";
+		int vybor6 = proves(2, 1, "1 ÈËÈ 2!");
+		if ((vybor5 == 1) && (vybor6 == 1))
+			POTeditKS1(KSS);
+		else if ((vybor5 == 2) && (vybor6 == 1))
+			POTeditKS2(KSS);
+		else if ((vybor5 == 1) && (vybor6 == 2))
+			POTeditKS3(KSS);
+		else if ((vybor5 == 2) && (vybor6 == 2))
+			POTeditKS4(KSS);
+	}
+}
+void PaketEDitTR(vector <TRUBA>& TRUBAS)
+{
+	if (TRUBAS.size() == 0)  cout << "ÒÐÓÁÛ ÎÒÑÓÒÑÒÂÓÞÒ\n";
+	else {
+		cout << "1. Âûáðàòü òðóáû ñàìîñòîÿòåëüíî\n" << "2. Âûáðàòü òðóáû ÷åðåç ôèëüòð\n";
+		int vybor5 = proves(2, 1, "1 ÈËÈ 2!");
+		if (vybor5 == 1)
+			POTeditTR1(TRUBAS);
+		else
+			POTeditTR2(TRUBAS);
+	}
+}
+void Loading(vector <TRUBA>& TRUBAS, vector <KS>& KSS)
+{
+	TRUBAS.clear();
+	KSS.clear();
+	string filename;
+	cout << "Ââåäèòå íàçâàíèå ôàéëà\n";
+	cin >> filename;
+	ifstream myfile(filename);
+	if (myfile.is_open())
+	{
+		int countTR, countKS;
+		myfile >> countTR;
+		while (countTR--) {
+			TRUBA TR;
+			myfile >> TR;
+			TRUBAS.push_back(TR);
+		}
+		myfile >> countKS;
+		while (countKS--) {
+			KS ks;
+			myfile >> ks;
+			KSS.push_back(ks);
+		}
+	}
+	else cout << "Îøèáêà ïðè ÷òåíèè\n";
+	myfile.close();
+}
+void Savingtofile(vector <TRUBA>& TRUBAS, vector <KS>& KSS)
+{
+	string filename;
+	cout << "Ââåäèòå íàçâàíèå ôàéëà\n";
+	cin >> filename;
+	ofstream fout(filename);
+	if (fout.is_open())
+	{
+		fout << TRUBAS.size() << " ";
+		for (TRUBA TR1 : TRUBAS)
+			saveinformTRUBAtxt(TR1, fout);
+		fout << endl;
+		fout << KSS.size() << " ";
+		for (KS K1 : KSS)
+			saveinformKStxt(K1, fout);
+	}
+	fout.close();
+}
 int main()
 {
 	setlocale(LC_ALL, "Russian");
@@ -153,15 +228,11 @@ int main()
 		}
 		case 3:
 		{
-			if (TRUBAS.size() == 0)  cout << "ÒÐÓÁÛ ÎÒÑÓÒÑÒÂÓÞÒ\n";
-			else
 		    PREP4DELTR(TRUBAS);
 			break;
 		}
 		case 4:
 		{
-			if (KSS.size() == 0)  cout << "ÒÐÓÁÛ ÎÒÑÓÒÑÒÂÓÞÒ\n"; 
-			else 
 			PREP4DELKS(KSS);
 			break;
 		}
@@ -183,18 +254,12 @@ int main()
 		}
 		case 6:
 		{
-			if (TRUBAS.size() == 0)  cout << "ÒÐÓÁÛ ÎÒÑÓÒÑÒÂÓÞÒ\n";
-			else {
 				knopkaEDITTR(TRUBAS);
-			}
 			break;
 		}
 		case 7:
 		{
-			if (KSS.size() == 0)  cout << "ÊÑ ÎÒÑÓÒÑÒÂÓÞÒ\n";
-			else {
 				knopkaEDITKS(KSS);
-			}
 			break;
 		}
 		case 8:
@@ -246,81 +311,22 @@ int main()
 		}
 		case 10:
 		{
-			if (TRUBAS.size() == 0)  cout << "ÒÐÓÁÛ ÎÒÑÓÒÑÒÂÓÞÒ\n";
-			else {
-				cout << "1. Âûáðàòü òðóáû ñàìîñòîÿòåëüíî\n" << "2. Âûáðàòü òðóáû ÷åðåç ôèëüòð\n";
-				int vybor5 = proves(2, 1, "1 ÈËÈ 2!");
-				if (vybor5 == 1)
-					POTeditTR1(TRUBAS);
-				else 
-					POTeditTR2(TRUBAS);
-			}
+			PaketEDitTR(TRUBAS);
 			break;
 		}
 		case 11:
 		{
-			if (KSS.size() == 0)  cout << "ÊÑ ÎÒÑÓÒÑÒÂÓÞÒ\n";
-			else {
-				cout << "1. Çàïóñòèòü ÊÑ\n" << "2. Îñòàíîâèòü ÊÑ\n";
-				int vybor5 = proves(2, 1, "1 èëè 2!");
-				cout << "1. Âûáðàòü ÊÑ ñàìîñòîÿòåëüíî\n" << "2. Âûáðàòü ÊÑ ÷åðåç ôèëüòð\n";
-				int vybor6 = proves(2, 1, "1 ÈËÈ 2!");
-				if ((vybor5 == 1) && (vybor6 == 1))
-					POTeditKS1(KSS);
-				else if ((vybor5 == 2) && (vybor6 == 1))
-					POTeditKS2(KSS);
-				else if ((vybor5 == 1) && (vybor6 == 2))
-					POTeditKS3(KSS);
-				else if ((vybor5 == 2) && (vybor6 == 2))
-					POTeditKS4(KSS);
-			}
-				break;
+			PaketEDitKS(KSS);
+			break;
 		}
 		case 12:
 		{
-			string filename;
-			cout << "Ââåäèòå íàçâàíèå ôàéëà\n";
-			cin >> filename;
-			ofstream fout(filename);
-		    if (fout.is_open())
-				{
-				fout << TRUBAS.size()<<" ";
-					for (TRUBA TR1 : TRUBAS)
-						saveinformTRUBAtxt(TR1, fout);
-					fout << endl;
-					fout << KSS.size()<<" ";
-					for (KS K1 : KSS)
-						saveinformKStxt(K1, fout);
-				}
-			fout.close();
+			Savingtofile(TRUBAS, KSS);
 			break;
 		}
 		case 13:
 		{
-			TRUBAS.clear();
-			KSS.clear();
-			string filename;
-			cout << "Ââåäèòå íàçâàíèå ôàéëà\n";
-			cin >> filename;
-			ifstream myfile(filename);
-			if (myfile.is_open())
-			{
-				int countTR, countKS;
-				myfile >> countTR;
-				while (countTR--) {
-					TRUBA TR;
-					myfile >> TR;
-					TRUBAS.push_back(TR);
-				}
-				myfile >> countKS;
-				while (countKS--) {
-					KS ks;
-					myfile >> ks;
-					KSS.push_back(ks);
-				}
-			}
-			else cout << "Îøèáêà ïðè ÷òåíèè\n";
-			myfile.close();
+			Loading(TRUBAS,KSS);
 			break;
 		}
 		return 0;
