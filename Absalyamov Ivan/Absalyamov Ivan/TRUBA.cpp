@@ -3,6 +3,22 @@
 #include <fstream>
 using namespace std;
 int TRUBA::MaxID=1;
+std::string TRUBA::Getname() const
+{
+	return name;
+}
+std::string TRUBA::Getpr() const
+{
+	return pr;
+}
+int TRUBA::GetMaxID()
+{
+	return MaxID;
+}
+int TRUBA::GetID() const
+{
+	return id;
+}
 TRUBA::TRUBA()
 {
 	id = MaxID++;
@@ -11,7 +27,8 @@ istream& operator >> (istream& in, TRUBA& truba)
 {
 	float vybor1;
 	cout << "¬ведите название" << endl;
-	in >> truba.name;
+	std::cin.ignore(256, '\n');
+	getline(in, truba.name, '\n');
 	cout << "¬ведите длину" << endl;
 	truba.dl = proves(5000000, 0, "ƒлина должна быть целым положительным числом\n");
 	cout << "¬ведите диаметр" << endl;
@@ -36,9 +53,10 @@ ifstream& operator >> (ifstream& myfile, TRUBA& TRUBA1)
 	myfile >> TRUBA1.name >>TRUBA1.dl >> TRUBA1.diam >> TRUBA1.pr;
 	return myfile;
 }
-void saveinformTRUBAtxt(TRUBA truba, ofstream& fout)
+ofstream& operator << (ofstream& fout, const TRUBA& truba)
 {
-	fout << truba.name<<" "<< truba.dl << " " << truba.diam << " " << truba.pr << " ";
+	fout << truba.name << " " << truba.dl << " " << truba.diam << " " << truba.pr << " ";
+	return fout;
 }
 void EDITRUBA(TRUBA& truba)
 {
@@ -46,58 +64,5 @@ void EDITRUBA(TRUBA& truba)
 	else truba.pr = "Yes";
 	cout << "—татус трубы изменен\n";
 }
-void PREP4DELTR(vector <TRUBA>& TRUBAS)
-{
-	if (TRUBAS.size() == 0)  cout << "“–”Ѕџ ќ“—”“—“¬”ё“\n";
-	else {
-		cout << "¬ведите id трубы (¬ведите 0, если хотите выйти в меню)\n";
-		int id = proves3(TRUBAS.size(), 1, "Ќет трубы с таким id (¬ведите 0, если хотите выйти в меню)\n");
-		int i = 0;
-		if (id != 0) {
-			for (auto& t : TRUBAS)
-			{
-				if (t.id == id)
-				{
-					swap(TRUBAS[i].name, TRUBAS[TRUBAS.size() - 1].name);
-					swap(TRUBAS[i].dl, TRUBAS[TRUBAS.size() - 1].dl);
-					swap(TRUBAS[i].diam, TRUBAS[TRUBAS.size() - 1].diam);
-					swap(TRUBAS[i].pr, TRUBAS[TRUBAS.size() - 1].pr);
-				}
-				i++;
-			}
-			TRUBAS.pop_back();
-		}
-	}
-}
-pair <int, TRUBA&> SelectTRUBA(vector<TRUBA>& g)
-{
-	cout << "¬ведите id (¬ведите 0, если хотите выйти в меню)\n";
-	int index = proves3(g.size(), 1, "Ќет трубы с таким id (¬ведите 0, если хотите выйти в меню)\n");
-	if (index == 0) return{ index, g[0] };
-	else
-		return { index,g[index - 1] };
-}
-void knopkaEDITTR(vector <TRUBA>& g)
-{
-	if (g.size() == 0)  cout << "“–”Ѕџ ќ“—”“—“¬”ё“\n";
-	else {
-		pair <int, TRUBA&> ATR = SelectTRUBA(g);
-		if (ATR.first != 0) {
-			EDITRUBA(ATR.second);
-			g[ATR.first - 1] = ATR.second;
-		}
-	}
-}
-void POTeditTR1(vector <TRUBA>& TRUBAS)
-{
-	int flag = 1;
-	do {
-		pair <int, TRUBA&> ATR = SelectTRUBA(TRUBAS);
-		if (ATR.first != 0) {
-			EDITRUBA(ATR.second);
-			TRUBAS[ATR.first - 1] = ATR.second;
-		}
-		flag = ATR.first;
-	} while (flag != 0);
-}
+
 

@@ -5,6 +5,7 @@
 #include "TRUBA.h"
 #include "KS.h"
 #include "utils.h"
+#include <unordered_map>
 using namespace std; 
 void print_menu() {
 	system("cls");  // очищаем экран
@@ -27,21 +28,20 @@ void print_menu() {
 using FilterTR = bool(*)(const TRUBA& t, string param);
 bool CheckbyNameTR(const TRUBA& t, string param)
 {
-	return t.name == param;
+	return t.Getname()== param;
 }
 bool CheckbyPr(const TRUBA& t, string param)
 {
-	return t.pr == param;
+	return t.Getpr() == param;
 }
-vector <int> FindTRUBAbyFilter(const vector <TRUBA>& TRUBAS, FilterTR f, string param)
+vector <int> FindTRUBAbyFilter(unordered_map <int, TRUBA>& TRUBAS, FilterTR f, string param)
 {
 	vector <int> res;
-	int i = 0;
-	for (auto& t : TRUBAS)
+	for (int i=0; i<TRUBAS.size(); i++)
 	{
+		TRUBA t = TRUBAS[i];
 		if (f(t, param))
 			res.push_back(i);
-		i++;
 	}
 	return res;
 }
@@ -49,115 +49,26 @@ template <typename T>
 using FilterKS = bool(*)(const KS& k, T param);
 bool CheckbyNameKS(const KS& k, string param)
 {
-	return k.name == param;
+	return k.Getname() == param;
 }
 bool CheckPercent(const KS& k, float param)
 {
-	return k.percent == param;
+	return ((100 * (k.Getkol() - k.Getkolvr()) / k.Getkol())>=param);
 }
 template <typename T>
-vector <int> FindKSbyFilter(const vector <KS>& KSS, FilterKS<T> f, T param)
+vector <int> FindKSbyFilter(unordered_map <int, KS>& KSS, FilterKS<T> f, T param)
 {
 	vector <int> res;
 	int i = 0;
-	for (auto& k : KSS)
+	for (int i = 0; i < KSS.size(); i++)
 	{
+		KS k = KSS[i];
 		if (f(k, param))
 			res.push_back(i);
-		i++;
 	}
 	return res;
 }
-void POTeditTR2(vector <TRUBA>& TRUBAS)
-{
-	cout << "1. Поиск по названию\n" << "2. Поиск по признаку в ремонте\n";
-	int vybor3 = proves(2, 1, "1 или 2!");
-	if (vybor3 == 1) {
-		string name;
-		cout << "Введите название трубы" << endl;
-		cin >> name;
-		for (int i : FindTRUBAbyFilter(TRUBAS, CheckbyNameTR, name))
-			EDITRUBA(TRUBAS[i]);
-	}
-	else {
-		string pr;
-		cout << "Yes - труба в ремонте/No - не в ремонте" << endl;
-		cin >> pr;
-		for (int i : FindTRUBAbyFilter(TRUBAS, CheckbyPr, pr)) {
-			EDITRUBA(TRUBAS[i]);
-		}
-	}
-}
-void POTeditKS3(vector <KS>& KSS)
-{
-	cout << "1. Поиск по названию\n" << "2. Поиск по проценту незадействованных цехов\n";
-	int vybor4 = proves(2, 1, "1 или 2!");
-	if (vybor4 == 1) {
-		string name;
-		cout << "Введите название КС" << endl;
-		cin >> name;
-		for (int i : FindKSbyFilter(KSS, CheckbyNameKS, name))
-			EDITKSPLUS(KSS[i]);
-	}
-	else {
-		float percent;
-		cout << "Введите процент" << endl;
-		cin >> percent;
-		for (int i : FindKSbyFilter(KSS, CheckPercent, percent))
-			EDITKSPLUS(KSS[i]);
-	}
-
-}
-void POTeditKS4(vector <KS>& KSS)
-{
-	cout << "1. Поиск по названию\n" << "2. Поиск по проценту незадействованных цехов\n";
-	int vybor4 = proves(2, 1, "1 или 2!");
-	if (vybor4 == 1) {
-		string name;
-		cout << "Введите название КС" << endl;
-		cin >> name;
-		for (int i : FindKSbyFilter(KSS, CheckbyNameKS, name))
-			EDITKSMINUS(KSS[i]);
-	}
-	else {
-		float percent;
-		cout << "Введите процент" << endl;
-		cin >> percent;
-		for (int i : FindKSbyFilter(KSS, CheckPercent, percent))
-			EDITKSMINUS(KSS[i]);
-	}
-}
-void PaketEDitKS(vector <KS>& KSS)
-{
-	if (KSS.size() == 0)  cout << "КС ОТСУТСТВУЮТ\n";
-	else {
-		cout << "1. Запустить КС\n" << "2. Остановить КС\n";
-		int vybor5 = proves(2, 1, "1 или 2!");
-		cout << "1. Выбрать КС самостоятельно\n" << "2. Выбрать КС через фильтр\n";
-		int vybor6 = proves(2, 1, "1 ИЛИ 2!");
-		if ((vybor5 == 1) && (vybor6 == 1))
-			POTeditKS1(KSS);
-		else if ((vybor5 == 2) && (vybor6 == 1))
-			POTeditKS2(KSS);
-		else if ((vybor5 == 1) && (vybor6 == 2))
-			POTeditKS3(KSS);
-		else if ((vybor5 == 2) && (vybor6 == 2))
-			POTeditKS4(KSS);
-	}
-}
-void PaketEDitTR(vector <TRUBA>& TRUBAS)
-{
-	if (TRUBAS.size() == 0)  cout << "ТРУБЫ ОТСУТСТВУЮТ\n";
-	else {
-		cout << "1. Выбрать трубы самостоятельно\n" << "2. Выбрать трубы через фильтр\n";
-		int vybor5 = proves(2, 1, "1 ИЛИ 2!");
-		if (vybor5 == 1)
-			POTeditTR1(TRUBAS);
-		else
-			POTeditTR2(TRUBAS);
-	}
-}
-void Loading(vector <TRUBA>& TRUBAS, vector <KS>& KSS)
+void Loading(unordered_map <int, TRUBA>& TRUBAS, unordered_map <int, KS>& KSS)
 {
 	TRUBAS.clear();
 	KSS.clear();
@@ -172,19 +83,19 @@ void Loading(vector <TRUBA>& TRUBAS, vector <KS>& KSS)
 		while (countTR--) {
 			TRUBA TR;
 			myfile >> TR;
-			TRUBAS.push_back(TR);
+			TRUBAS.insert(make_pair(TR.GetID(), TR));
 		}
 		myfile >> countKS;
 		while (countKS--) {
 			KS ks;
 			myfile >> ks;
-			KSS.push_back(ks);
+			KSS.insert(make_pair(ks.GetID(), ks));
 		}
 	}
 	else cout << "Ошибка при чтении\n";
 	myfile.close();
 }
-void Savingtofile(vector <TRUBA>& TRUBAS, vector <KS>& KSS)
+void Savingtofile(unordered_map <int, TRUBA>& TRUBAS, unordered_map <int, KS>& KSS)
 {
 	string filename;
 	cout << "Введите название файла\n";
@@ -192,13 +103,13 @@ void Savingtofile(vector <TRUBA>& TRUBAS, vector <KS>& KSS)
 	ofstream fout(filename);
 	if (fout.is_open())
 	{
-		fout << TRUBAS.size() << " ";
-		for (TRUBA TR1 : TRUBAS)
-			saveinformTRUBAtxt(TR1, fout);
+		fout << TRUBAS.size()<<' ';
+		for (const auto& TR1 : TRUBAS)
+			fout << TR1.second;
 		fout << endl;
-		fout << KSS.size() << " ";
-		for (KS K1 : KSS)
-			saveinformKStxt(K1, fout);
+		fout << KSS.size()<<' ';
+		for (const auto& K1 : KSS)
+			fout << K1.second;
 	}
 	fout.close();
 }
@@ -206,8 +117,8 @@ int main()
 {
 	setlocale(LC_ALL, "Russian");
 	int variant;
-    vector <TRUBA> TRUBAS;
-	vector <KS> KSS;
+	unordered_map <int, TRUBA> TRUBAS;
+	unordered_map <int, KS> KSS;
 	do {
 		print_menu();
 		variant = proves(13, 0, "Действие выбрано некорректно, выберите повторно\n");
@@ -216,24 +127,34 @@ int main()
 		{
 			TRUBA TR1;
 			cin >> TR1;
-			TRUBAS.push_back(TR1);
+			TRUBAS.insert(make_pair(TR1.GetID(), TR1));
 			break;
 		}
 		case 2:
 		{
 			KS K1;
 			cin >> K1;
-			KSS.push_back(K1);
+			KSS.insert(make_pair(K1.GetID(), K1));
 			break;
 		}
 		case 3:
 		{
-		    PREP4DELTR(TRUBAS);
+			unordered_map <int, TRUBA> ::iterator it;
+			int id;
+			cout << "Введите id\n";
+			cin >> id;
+			it = TRUBAS.find(id); 
+			TRUBAS.erase(it); 
 			break;
 		}
-		case 4:
+	    case 4:
 		{
-			PREP4DELKS(KSS);
+			unordered_map <int, KS> ::iterator it;
+			int id;
+			cout << "Введите id\n";
+			cin >> id;
+			it = KSS.find(id);
+		    KSS.erase(it);  
 			break;
 		}
 		case 5:
@@ -241,25 +162,45 @@ int main()
 			if (TRUBAS.size() == 0) { cout << "ТРУБЫ ОТСУТСТВУЮТ\n"; }
 			else {
 				cout << "ТРУБЫ\n";
-				for (TRUBA TR1 : TRUBAS)
-					cout << TR1 << endl;
+				for (const auto& TR1 : TRUBAS)
+					cout << TR1.second<<endl;
 			}
 			if (KSS.size() == 0) { cout << "КОМПРЕССОРНЫЕ СТАНЦИИ ОТСУТСТВУЮТ\n"; }
 			else {
 				cout << "КОМПРЕССОРНЫЕ СТАНЦИИ\n";
-				for (KS K1 : KSS)
-					cout << K1 << endl;
+				for (const auto& K1 : KSS)
+					cout << K1.second<<endl;
 			}
 			break;
 		}
 		case 6:
 		{
-				knopkaEDITTR(TRUBAS);
+			if (TRUBAS.size() == 0)  cout << "ТРУБЫ ОТСУТСТВУЮТ\n";
+			else {
+				cout << "Введите id трубы. 0 - если хотите выйти\n";
+				int id;
+				id = proves3(TRUBAS.size(), 1, "Нет трубы с таким id\n");
+				if (id != 0) {
+					unordered_map <int, TRUBA> ::iterator it;
+					it = TRUBAS.find(id);
+					EDITRUBA(it->second);
+				}
+			}
 			break;
 		}
 		case 7:
 		{
-				knopkaEDITKS(KSS);
+			if (KSS.size() == 0)  cout << "ТРУБЫ ОТСУТСТВУЮТ\n";
+			else {
+				cout << "Введите id трубы. 0 - если хотите выйти\n";
+				int id;
+				id = proves3(KSS.size(), 1, "Нет КС с таким id\n");
+				if (id != 0) {
+					unordered_map <int, KS> ::iterator it;
+					it = KSS.find(id);
+					EDITKS(it->second);
+				}
+			}
 			break;
 		}
 		case 8:
@@ -284,7 +225,6 @@ int main()
 				}
 			}
 			break;
-
 		}
 		case 9:
 		{
@@ -311,12 +251,94 @@ int main()
 		}
 		case 10:
 		{
-			PaketEDitTR(TRUBAS);
+			if (TRUBAS.size() == 0)  cout << "ТРУБЫ ОТСУТСТВУЮТ\n";
+			else {
+				cout << "1. Поиск по названию\n" << "2. Поиск по признаку в ремонте\n";
+				int choice = proves(2, 1, "1 или 2");
+				vector <int> result;
+				if (choice == 1)
+				{
+					string name;
+					cout << "Введите название трубы" << endl;
+					cin >> name;
+					result = FindTRUBAbyFilter(TRUBAS, CheckbyNameTR, name);
+					for (int i : result)
+						cout << TRUBAS[i] << endl;
+				}
+				else {
+					string pr;
+					cout << "Yes - труба в ремонте/No - не в ремонте" << endl;
+					cin >> pr;
+					result = FindTRUBAbyFilter(TRUBAS, CheckbyPr, pr);
+					for (int i : result)
+						cout << TRUBAS[i] << endl;
+				}
+				cout << "1 - Изменить состояние выбранных труб\n" << "2 - выбрать самостоятельно\n"<<"0 - выйти\n";
+				int choice2 = proves3(2, 1, "1 или 2");
+				if (choice2 == 1)
+					for (int i : result)
+						EDITRUBA(TRUBAS[i]);
+				else if (choice2==2)
+				{
+					int k=1;
+					cout << "Введите id труб, которые хотите отредактировать. 0 - если хотите выйти\n";
+					while (k != 0)
+					{
+						k = proves3(TRUBAS.size(), 1, "Нет трубы с таким id. 0 - если хотите выйти\n");
+						if (k != 0) {
+							unordered_map <int, TRUBA> ::iterator it;
+							it = TRUBAS.find(k);
+							EDITRUBA(it->second);
+						}
+					}
+				}
+			}
 			break;
 		}
 		case 11:
 		{
-			PaketEDitKS(KSS);
+			if (KSS.size() == 0)  cout << "КОМПРЕССОРНЫЕ СТАНЦИИ ОТСУТСТВУЮТ\n";
+			else {
+				vector <int> res;
+				cout << "1. Поиск по названию\n" << "2. Поиск по проценту незадействованных цехов\n";
+				int vybor4 = proves(2, 1, "1 или 2!");
+				if (vybor4 == 1) {
+					string name;
+					cout << "Введите название КС" << endl;
+					cin >> name;
+					res = FindKSbyFilter(KSS, CheckbyNameKS, name);
+					for (int i : res)
+						cout << KSS[i] << endl;
+				}
+				else {
+					float percent;
+					cout << "Введите процент" << endl;
+					cin >> percent;
+					res = FindKSbyFilter(KSS, CheckPercent, percent);
+					for (int i : res)
+						cout << KSS[i] << endl;
+				}
+				cout << "1 - Отредактировать выбранные КС\n" << "2 - выбрать самостоятельно\n" << "0 - выйти\n";
+				int choice2 = proves3(2, 1, "1 или 2");
+				if (choice2 == 1)
+					for (int i : res)
+						EDITKS(KSS[i]);
+				else if (choice2 == 2)
+				{
+					int k = 1;
+					cout << "Введите id КС, которые хотите отредактировать. 0 - если хотите выйти\n";
+					while (k != 0)
+					{
+						k = proves3(TRUBAS.size(), 1, "Нет КС с таким id. 0 - если хотите выйти\n");
+						if (k != 0) {
+							unordered_map <int, KS> ::iterator it;
+							it = KSS.find(k);
+							EDITKS(it->second);
+						}
+					}
+				}
+
+			}
 			break;
 		}
 		case 12:
