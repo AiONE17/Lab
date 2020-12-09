@@ -43,6 +43,9 @@ vector <int> FindTRUBAbyFilter(unordered_map <int, TRUBA>& TRUBAS, FilterTR f, s
 		if (f(t, param))
 			res.push_back(i);
 	}
+	unordered_map <int, TRUBA>::iterator it =TRUBAS.end();
+	it--;
+	TRUBAS.erase(it);
 	return res;
 }
 template <typename T>
@@ -59,13 +62,15 @@ template <typename T>
 vector <int> FindKSbyFilter(unordered_map <int, KS>& KSS, FilterKS<T> f, T param)
 {
 	vector <int> res;
-	int i = 0;
 	for (int i = 0; i < KSS.size(); i++)
 	{
 		KS k = KSS[i];
 		if (f(k, param))
 			res.push_back(i);
 	}
+	unordered_map <int, KS>::iterator it = KSS.end();
+	it--;
+	KSS.erase(it);
 	return res;
 }
 void Loading(unordered_map <int, TRUBA>& TRUBAS, unordered_map <int, KS>& KSS)
@@ -142,19 +147,26 @@ int main()
 			unordered_map <int, TRUBA> ::iterator it;
 			int id;
 			cout << "Введите id\n";
-			cin >> id;
-			it = TRUBAS.find(id); 
-			TRUBAS.erase(it); 
+			id = proves(TRUBAS.size(),1,"Нет трубы с таким id\n");
+			unordered_map <int, TRUBA> ::iterator item1 = TRUBAS.find(id);
+			unordered_map <int, TRUBA> ::iterator item2 = TRUBAS.find(TRUBAS.size());
+			if ((item1 != TRUBAS.end()) && (item2 != TRUBAS.end()))
+				swap(item1->second, item2->second);
+			TRUBAS[id].SetID(id);
+			TRUBAS.erase(item2);
 			break;
 		}
 	    case 4:
 		{
-			unordered_map <int, KS> ::iterator it;
 			int id;
 			cout << "Введите id\n";
-			cin >> id;
-			it = KSS.find(id);
-		    KSS.erase(it);  
+			id = proves(KSS.size(), 1, "Нет трубы с таким id\n");
+			unordered_map <int, KS> ::iterator item1 = KSS.find(id);
+			unordered_map <int, KS> ::iterator item2 = KSS.find(KSS.size());
+			if ((item1 != KSS.end()) && (item2 != KSS.end()))
+				swap(item1->second, item2->second);
+			KSS[id].SetID(id);
+		    KSS.erase(item2);  
 			break;
 		}
 		case 5:
@@ -179,7 +191,7 @@ int main()
 			else {
 				cout << "Введите id трубы. 0 - если хотите выйти\n";
 				int id;
-				id = proves3(TRUBAS.size(), 1, "Нет трубы с таким id\n");
+				id = proves3(TRUBAS.size()-1, 1, "Нет трубы с таким id\n");
 				if (id != 0) {
 					unordered_map <int, TRUBA> ::iterator it;
 					it = TRUBAS.find(id);
@@ -194,7 +206,7 @@ int main()
 			else {
 				cout << "Введите id трубы. 0 - если хотите выйти\n";
 				int id;
-				id = proves3(KSS.size(), 1, "Нет КС с таким id\n");
+				id = proves3(KSS.size()-1, 1, "Нет КС с таким id\n");
 				if (id != 0) {
 					unordered_map <int, KS> ::iterator it;
 					it = KSS.find(id);

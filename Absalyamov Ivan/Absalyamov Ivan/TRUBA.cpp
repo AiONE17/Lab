@@ -11,13 +11,13 @@ std::string TRUBA::Getpr() const
 {
 	return pr;
 }
-int TRUBA::GetMaxID()
-{
-	return MaxID;
-}
 int TRUBA::GetID() const
 {
 	return id;
+}
+void TRUBA::SetID(int newID)
+{
+	id = newID;
 }
 TRUBA::TRUBA()
 {

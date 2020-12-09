@@ -16,6 +16,10 @@ int KS::Getkol() const
 {
 	return kol;
 }
+void KS::SetID(int newID)
+{
+	id = newID;
+}
 KS::KS()
 {
 	id = MaxID++;
