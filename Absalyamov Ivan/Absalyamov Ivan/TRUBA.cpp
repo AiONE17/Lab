@@ -7,7 +7,7 @@ std::string TRUBA::Getname() const
 {
 	return name;
 }
-std::string TRUBA::Getpr() const
+bool TRUBA::Getpr() const
 {
 	return pr;
 }
@@ -15,28 +15,35 @@ int TRUBA::GetID() const
 {
 	return id;
 }
+int TRUBA::GetMaxID() const
+{
+	return MaxID;
+}
 void TRUBA::SetID(int newID)
 {
 	id = newID;
 }
+void TRUBA::SetMaxID(int newID)
+{
+	MaxID = newID;
+}
 TRUBA::TRUBA()
 {
-	id = MaxID++;
+	id = MaxID;
+	MaxID++;
 }
 istream& operator >> (istream& in, TRUBA& truba)
 {
 	float vybor1;
 	cout << "Введите название" << endl;
-	std::cin.ignore(256, '\n');
+	cin.ignore(256, '\n');
 	getline(in, truba.name, '\n');
 	cout << "Введите длину" << endl;
-	truba.dl = proves(5000000, 0, "Длина должна быть целым положительным числом\n");
+	truba.dl = proves(5000000, 1);
 	cout << "Введите диаметр" << endl;
-	truba.diam = proves(5000000, 0,"Диаметр должен быть целым положительным числом\n");
-	cout << "В ремонте или нет (1-если в ремонте, 2-если в рабочем состоянии)" << endl;
-	vybor1 = proves(2, 1, "1 или 2!!!\n");
-	if (vybor1 == 1) { truba.pr = "Yes"; }
-	else if (vybor1 == 2) { truba.pr = "No"; }
+	truba.diam = proves(5000000, 1);
+	cout << "В ремонте или нет (1-если в ремонте, 0-если в рабочем состоянии)" << endl;
+	truba.pr = proves(1, 0);
 	return in;
 }
 ostream& operator << (ostream& out, const TRUBA& truba)
@@ -45,7 +52,10 @@ ostream& operator << (ostream& out, const TRUBA& truba)
 	out << "Название: " << truba.name << endl;
 	out << "Длина: " << truba.dl << "\n";
 	out << "Диаметр: " << truba.diam << "\n";
-	out << "В ремонте: " << truba.pr << "\n";
+	if (truba.pr==true)
+		out << "В ремонте: " << "Да" << "\n";
+	else 
+		out << "В ремонте: " << "Hет" << "\n";
 	return out;
 }
 ifstream& operator >> (ifstream& myfile, TRUBA& TRUBA1)
@@ -60,9 +70,7 @@ ofstream& operator << (ofstream& fout, const TRUBA& truba)
 }
 void EDITRUBA(TRUBA& truba)
 {
-	if (truba.pr == "Yes") truba.pr = "No";
-	else truba.pr = "Yes";
-	cout << "Статус трубы изменен\n";
+	truba.pr = !truba.pr;
 }
 
 

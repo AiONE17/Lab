@@ -15,7 +15,8 @@ public:
 	std::string Getname() const;
 	int Getkol() const;
 	int Getkolvr() const;
-	static int GetMaxID();
+	int GetMaxID() const;
+	void SetMaxID(int newID);
 	int GetID() const;
 	void SetID(int newID);
 	friend std::istream& operator >> (std::istream& in, KS& ks);
