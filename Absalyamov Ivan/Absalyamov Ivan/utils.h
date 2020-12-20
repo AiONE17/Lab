@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
- int proves(int verhgran, int nizhgran) {
+inline int proves(int verhgran, int nizhgran) {
 	float vvedchis;
 	while ((std::cin >> vvedchis).fail() || (vvedchis - floor(vvedchis)) || (vvedchis > verhgran) || (vvedchis < nizhgran))
 	{
@@ -10,7 +10,7 @@
 	}
 	return vvedchis;
 }
-float proveofeffect(int verhgran, int nizhgran) {
+inline float proveofeffect(int verhgran, int nizhgran) {
 	float vvedeffect;
 	while ((std::cin >> vvedeffect).fail() || (vvedeffect > verhgran) || (vvedeffect < nizhgran))
 	{
@@ -20,7 +20,7 @@ float proveofeffect(int verhgran, int nizhgran) {
 	}
 	return vvedeffect;
 }
- int provewith0(int verhgran, int nizhgran) {
+ inline int provewith0(int verhgran, int nizhgran) {
 	 float vvedchis;
 	 while ((std::cin >> vvedchis).fail() || (vvedchis - floor(vvedchis)) || (vvedchis > verhgran) || (vvedchis < nizhgran) && (vvedchis != 0))
 	 {

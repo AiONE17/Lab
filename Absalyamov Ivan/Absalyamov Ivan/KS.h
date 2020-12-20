@@ -3,6 +3,7 @@
 #include <vector>
 #include <iostream>
 #include "utils.h"
+using namespace std;
 class KS
 {
 	float effect;
@@ -15,8 +16,8 @@ public:
 	std::string Getname() const;
 	int Getkol() const;
 	int Getkolvr() const;
-	int GetMaxID() const;
-	void SetMaxID(int newID);
+	static int GetMaxID();
+	static void SetMaxID(int newID);
 	int GetID() const;
 	void SetID(int newID);
 	friend std::istream& operator >> (std::istream& in, KS& ks);

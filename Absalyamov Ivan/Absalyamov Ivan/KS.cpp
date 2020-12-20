@@ -20,7 +20,7 @@ void KS::SetID(int newID)
 {
 	id = newID;
 }
-int KS::GetMaxID() const
+int KS::GetMaxID()
 {
 	return MaxID;
 }

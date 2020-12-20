@@ -141,10 +141,12 @@
   <ItemGroup>
     <ClCompile Include="Absalyamov Ivan.cpp" />
     <ClCompile Include="KS.cpp" />
+    <ClCompile Include="network.cpp" />
     <ClCompile Include="TRUBA.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="KS.h" />
+    <ClInclude Include="network.h" />
     <ClInclude Include="TRUBA.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>

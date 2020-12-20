@@ -3,7 +3,7 @@
 #include <fstream>
 using namespace std;
 int TRUBA::MaxID=1;
-std::string TRUBA::Getname() const
+string TRUBA::Getname() const
 {
 	return name;
 }
@@ -15,22 +15,53 @@ int TRUBA::GetID() const
 {
 	return id;
 }
-int TRUBA::GetMaxID() const
+int TRUBA::GetVyhod() const
+{
+	return vyhod;
+}
+int TRUBA::GetVhod() const
+{
+	return vhod;
+}
+int TRUBA::GetDL() const
+{
+	return dl;
+}
+int TRUBA::GetMaxID()
 {
 	return MaxID;
+}
+bool TRUBA::GetStatusOfuse() const
+{
+	return StatusOfuse;
 }
 void TRUBA::SetID(int newID)
 {
 	id = newID;
 }
+void TRUBA::SetVhod(int id)
+{
+	vhod = id;
+}
+void TRUBA::SetVyhod(int id)
+{
+	vyhod = id;
+}
 void TRUBA::SetMaxID(int newID)
 {
 	MaxID = newID;
+}
+void TRUBA::SetStatusOfuse(bool newStatus)
+{
+	StatusOfuse = newStatus;
 }
 TRUBA::TRUBA()
 {
 	id = MaxID;
 	MaxID++;
+	StatusOfuse = false;
+	vyhod = 0;
+	vhod = 0;
 }
 istream& operator >> (istream& in, TRUBA& truba)
 {
@@ -56,6 +87,9 @@ ostream& operator << (ostream& out, const TRUBA& truba)
 		out << "В ремонте: " << "Да" << "\n";
 	else 
 		out << "В ремонте: " << "Hет" << "\n";
+	out << "asd " << truba.vyhod;
+	out << "dsad s" << truba.vhod<<endl;
+	out << "status" << truba.StatusOfuse << endl;
 	return out;
 }
 ifstream& operator >> (ifstream& myfile, TRUBA& TRUBA1)
