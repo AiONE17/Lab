@@ -2,21 +2,22 @@
 #include <iostream>
 #include <unordered_map>
 using namespace std;
-void network::CreateMatrix(unordered_map<int, TRUBA>& trubas, unordered_map<int, KS>& kss) 
+void network::CreateMatrix(unordered_map<int, TRUBA>& trubas, unordered_map<int, KS>& kss)
 {
 	int n = kss.size();
+	V = n;
 	WeightsMatrix.clear();
 	WeightsMatrix.resize(n);
 	adj = new list<int>[n];
 	for (int i = 0; i < n; i++)
-			WeightsMatrix[i].resize(n);
+		WeightsMatrix[i].resize(n);
 	for (auto it = trubas.begin(); it != trubas.end(); it++) {
 		int k = it->second.GetVyhod();
 		int l = it->second.GetVhod();
 		if (l < kss.size() + 1 && l > 0 && k > 0 && k < kss.size() + 1)
 		{
 			WeightsMatrix[k - 1][l - 1] = it->second.GetDL();
-			adj[k-1].push_back(l-1);
+			adj[k - 1].push_back(l - 1);
 		}
 	}
 	for (int i = 0; i < n; i++) {
@@ -35,7 +36,7 @@ void network::topologicalSortUtil(int v, bool visited[], stack<int>& Stack)
 			topologicalSortUtil(*i, visited, Stack);
 	Stack.push(v);
 }
-bool network::isCyclicUtil(int v,bool visited[], int parent)
+bool network::isCyclicUtil(int v, bool visited[], int parent)
 {
 	visited[v] = true;
 	list<int>::iterator i;
@@ -80,8 +81,10 @@ void network::TopSort()
 		Stack.pop();
 	}
 }
-bool network::bfs(vector<vector<int>>rGraph, int s, int t, int parent[]) {
-	bool* visited=new bool[V];
+bool network::bfs(vector<vector<int>>rGraph, int s, int t, int parent[])
+//bool network::bfs(vector<vector<int>>rGraph, int s, int t, vector<int>parent)
+{
+	bool* visited = new bool[V];
 	memset(visited, 0, sizeof(visited));
 	queue<int> q;
 	q.push(s);
@@ -104,6 +107,8 @@ bool network::bfs(vector<vector<int>>rGraph, int s, int t, int parent[]) {
 int network::fordFulkerson(int s, int t) {
 	int u, v;
 	vector<vector<int>>rGraph(V);
+	for (int i = 0; i < V; i++)
+		rGraph[i].resize(V);
 	for (u = 0; u < V; u++)
 		for (v = 0; v < V; v++)
 			rGraph[u][v] = WeightsMatrix[u][v];
@@ -141,21 +146,20 @@ void network::printSolution(int dist[])
 	for (int i = 0; i < V; i++)
 		printf("%d \t\t %d\n", i, dist[i]);
 }
-void network::dijkstra(vector<vector<int>>graph, int src)
+void network::dijkstra(int src)
 {
-	int* dist=new int[V]; // The output array.  dist[i] ill hold the shortest 
-	bool* sptSet=new bool[V]; // sptSet[i] will be true if vertex i is included in shortest 
+	int* dist = new int[V]; // The output array.  dist[i] ill hold the shortest 
+	bool* sptSet = new bool[V]; // sptSet[i] will be true if vertex i is included in shortest 
 	for (int i = 0; i < V; i++)
-		dist[i] = INT_MAX, sptSet[i] = false; 
+		dist[i] = INT_MAX, sptSet[i] = false;
 	dist[src] = 0;
-	for (int count = 0; count < V - 1; count++) { 
+	for (int count = 0; count < V - 1; count++) {
 		int u = minDistance(dist, sptSet);
 		sptSet[u] = true;
 		for (int v = 0; v < V; v++)
-			if (!sptSet[v] && graph[u][v] && dist[u] != INT_MAX
-				&& dist[u] + graph[u][v] < dist[v])
-				dist[v] = dist[u] + graph[u][v];
+			if (!sptSet[v] && WeightsMatrix[u][v] && dist[u] != INT_MAX
+				&& dist[u] + WeightsMatrix[u][v] < dist[v])
+				dist[v] = dist[u] + WeightsMatrix[u][v];
 	}
 	printSolution(dist);
 }
-

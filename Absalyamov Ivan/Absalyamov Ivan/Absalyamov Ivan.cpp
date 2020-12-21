@@ -28,6 +28,7 @@ void print_menu() {
 	cout << "15. Ìàòðèöà âåñîâ\n";
 	cout << "16. Òîïîëîãè÷åñêàÿ ñîðòèðîâêà\n";
 	cout << "17. Íàéòè ìàêñèìàëüíûé ïîòîê\n";
+	cout << "18. Íàéòè êðàò÷àéøèå ïóòè\n";
 	cout << "0. Âûõîä\n";
 }
 template<class Tcl, typename Tpar>
@@ -162,7 +163,7 @@ int main()
 	network net;
 	do {
 		print_menu();
-		variant = proves(17, 0);
+		variant = proves(18, 0);
 		switch (variant) {
 		case 1:
 		{
@@ -369,7 +370,14 @@ int main()
 		{
 			if (TRUBAS.size() == 0)  cout << "ÒÐÓÁÛ ÎÒÑÓÒÑÒÂÓÞÒ\n";
 			else
-				net.fordFulkerson(0, 5);
+				cout<<net.fordFulkerson(0, 5);
+			break;
+		}
+		case 18:
+		{
+			if (TRUBAS.size() == 0)  cout << "ÒÐÓÁÛ ÎÒÑÓÒÑÒÂÓÞÒ\n";
+			else
+				net.dijkstra(1);
 			break;
 		}
 		return 0;

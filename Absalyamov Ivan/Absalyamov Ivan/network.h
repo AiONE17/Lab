@@ -16,7 +16,7 @@ class network
     vector<vector<int>>WeightsMatrix;
     void topologicalSortUtil(int v, bool visited[], stack<int>& Stack);
     bool isCyclicUtil(int v, bool visited[], int parent);
-    bool bfs(vector<vector<int>>graph, int s, int t, int parent[]);
+    bool bfs(vector<vector<int>>rGraph, int s, int t,int parent[]);
     void printSolution(int dist[]);
     int minDistance(int dist[], bool sptSet[]);
 public:
@@ -24,6 +24,6 @@ public:
     void TopSort();
     bool isCyclic();
     int fordFulkerson(int s, int t);
-    void dijkstra(vector<vector<int>>grraph, int src);
+    void dijkstra(int src);
 };
 
