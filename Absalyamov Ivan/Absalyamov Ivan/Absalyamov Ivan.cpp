@@ -27,6 +27,7 @@ void print_menu() {
 	cout << "14. Отсоединить компрессорные станции\n";
 	cout << "15. Матрица весов\n";
 	cout << "16. Топологическая сортировка\n";
+	cout << "17. Найти максимальный поток\n";
 	cout << "0. Выход\n";
 }
 template<class Tcl, typename Tpar>
@@ -161,7 +162,7 @@ int main()
 	network net;
 	do {
 		print_menu();
-		variant = proves(16, 0);
+		variant = proves(17, 0);
 		switch (variant) {
 		case 1:
 		{
@@ -359,7 +360,16 @@ int main()
 		{
 			if (TRUBAS.size() == 0)  cout << "ТРУБЫ ОТСУТСТВУЮТ\n";
 			else
-				net.TopSort();
+				if (net.isCyclic() == true) cout << "Граф цикличен\n";
+				else
+					net.TopSort();
+			break;
+		}
+		case 17:
+		{
+			if (TRUBAS.size() == 0)  cout << "ТРУБЫ ОТСУТСТВУЮТ\n";
+			else
+				net.fordFulkerson(0, 5);
 			break;
 		}
 		return 0;
