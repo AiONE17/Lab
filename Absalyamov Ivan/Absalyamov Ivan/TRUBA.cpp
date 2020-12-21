@@ -87,19 +87,19 @@ ostream& operator << (ostream& out, const TRUBA& truba)
 		out << "В ремонте: " << "Да" << "\n";
 	else 
 		out << "В ремонте: " << "Hет" << "\n";
-	out << "asd " << truba.vyhod;
-	out << "dsad s" << truba.vhod<<endl;
+	out << "выход " << truba.vyhod;
+	out << "вход " << truba.vhod<<endl;
 	out << "status" << truba.StatusOfuse << endl;
 	return out;
 }
 ifstream& operator >> (ifstream& myfile, TRUBA& TRUBA1)
 {
-	myfile >> TRUBA1.name >>TRUBA1.dl >> TRUBA1.diam >> TRUBA1.pr;
+	myfile >> TRUBA1.name >> TRUBA1.dl >> TRUBA1.diam >> TRUBA1.pr;
 	return myfile;
 }
 ofstream& operator << (ofstream& fout, const TRUBA& truba)
 {
-	fout << truba.name << " " << truba.dl << " " << truba.diam << " " << truba.pr << " ";
+	fout << truba.name << " " << truba.dl << " " << truba.diam << " " << truba.pr;
 	return fout;
 }
 void EDITRUBA(TRUBA& truba)

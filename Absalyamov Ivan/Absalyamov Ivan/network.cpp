@@ -34,41 +34,10 @@ void network::topologicalSortUtil(int v, bool visited[], stack<int>& Stack)
 	for (i = adj[v].begin(); i != adj[v].end(); ++i)
 		if (!visited[*i])
 			topologicalSortUtil(*i, visited, Stack);
-	Stack.push(v);
-}
-bool network::isCyclicUtil(int v, bool visited[], int parent)
-{
-	visited[v] = true;
-	list<int>::iterator i;
-	for (i = adj[v].begin(); i !=
-		adj[v].end(); ++i)
-	{
-		if (!visited[*i])
-		{
-			if (isCyclicUtil(*i, visited, v))
-				return true;
-		}
-		else if (*i != parent)
-			return true;
-	}
-	return false;
-}
-bool network::isCyclic()
-{
-	bool* visited = new bool[V];
-	for (int i = 0; i < V; i++)
-		visited[i] = false;
-	for (int u = 0; u < V; u++)
-	{
-		if (!visited[u])
-			if (isCyclicUtil(u, visited, -1))
-				return true;
-	}
-	return false;
+	Stack.push(v+1);
 }
 void network::TopSort()
 {
-	int V = WeightsMatrix.size();
 	stack<int> Stack;
 	bool* visited = new bool[V];
 	for (int i = 0; i < V; i++)
@@ -81,8 +50,42 @@ void network::TopSort()
 		Stack.pop();
 	}
 }
+bool network::isCyclicUtil(int v, bool visited[], bool* recStack)
+{
+	if (visited[v] == false)
+	{
+		visited[v] = true;
+		recStack[v] = true;
+		list<int>::iterator i;
+		for (i = adj[v].begin(); i != adj[v].end(); ++i)
+		{
+			if (!visited[*i] && isCyclicUtil(*i, visited, recStack))
+				return true;
+			else if (recStack[*i])
+				return true;
+		}
+	}
+	recStack[v] = false;  
+	return false;
+}
+bool network::isCyclic()
+{
+	bool* visited = new bool[V];
+	bool* recStack = new bool[V];
+	for (int i = 0; i < V; i++)
+	{
+		visited[i] = false;
+		recStack[i] = false;
+	}
+	for (int u = 0; u < V; u++)
+	{
+		if (!visited[u])
+			if (isCyclicUtil(u, visited, recStack))
+				return true;
+	}
+	return false;
+}
 bool network::bfs(vector<vector<int>>rGraph, int s, int t, int parent[])
-//bool network::bfs(vector<vector<int>>rGraph, int s, int t, vector<int>parent)
 {
 	bool* visited = new bool[V];
 	memset(visited, 0, sizeof(visited));
@@ -112,7 +115,7 @@ int network::fordFulkerson(int s, int t) {
 	for (u = 0; u < V; u++)
 		for (v = 0; v < V; v++)
 			rGraph[u][v] = WeightsMatrix[u][v];
-	int* parent=new int[V];
+	int* parent = new int[V];
 	int max_flow = 0;
 	while (bfs(rGraph, s, t, parent)) {
 		int path_flow = INT_MAX;
@@ -136,7 +139,6 @@ int network::minDistance(int dist[], bool sptSet[])
 	for (int v = 0; v < V; v++)
 		if (sptSet[v] == false && dist[v] <= min)
 			min = dist[v], min_index = v;
-
 	return min_index;
 }
 
@@ -144,12 +146,12 @@ void network::printSolution(int dist[])
 {
 	printf("Vertex \t\t Distance from Source\n");
 	for (int i = 0; i < V; i++)
-		printf("%d \t\t %d\n", i, dist[i]);
+		printf("%d \t\t %d\n", i+1, dist[i]);
 }
 void network::dijkstra(int src)
 {
-	int* dist = new int[V]; // The output array.  dist[i] ill hold the shortest 
-	bool* sptSet = new bool[V]; // sptSet[i] will be true if vertex i is included in shortest 
+	int* dist = new int[V];
+	bool* sptSet = new bool[V]; 
 	for (int i = 0; i < V; i++)
 		dist[i] = INT_MAX, sptSet[i] = false;
 	dist[src] = 0;

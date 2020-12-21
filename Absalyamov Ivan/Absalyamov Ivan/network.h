@@ -15,8 +15,8 @@ class network
     list<int>* adj;
     vector<vector<int>>WeightsMatrix;
     void topologicalSortUtil(int v, bool visited[], stack<int>& Stack);
-    bool isCyclicUtil(int v, bool visited[], int parent);
-    bool bfs(vector<vector<int>>rGraph, int s, int t,int parent[]);
+    bool isCyclicUtil(int v, bool visited[], bool* recStack);
+    bool bfs(vector<vector<int>>graph, int s, int t,int parent[]);
     void printSolution(int dist[]);
     int minDistance(int dist[], bool sptSet[]);
 public:

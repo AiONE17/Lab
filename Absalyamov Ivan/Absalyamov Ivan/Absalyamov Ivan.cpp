@@ -58,6 +58,10 @@ bool CheckbyPr(const TRUBA& t, bool param)
 {
 	return t.Getpr() == param;
 }
+bool CheckbyVyhod(const TRUBA& t, int param)
+{
+	return t.GetVyhod() == param;
+}
 
 void Loading(unordered_map <int, TRUBA>& TRUBAS, unordered_map <int, KS>& KSS)
 {
@@ -117,8 +121,8 @@ void DeleteObject(unordered_map <int, T>& group)
 	else
 	{
 		group.erase(id);
-		cout << "Òðóáà óñïåøíî óäàëåíà"<<endl;
-	}
+		cout << "Îáúåêò óñïåøíî óäàëåí"<<endl;
+	}	
 }
 void Connect(unordered_map<int, TRUBA>& trubas, unordered_map<int, KS>& kss)
 {
@@ -197,7 +201,8 @@ int main()
 				for (const auto& TR1 : TRUBAS)
 					cout << TR1.second << endl;
 			}
-			if (KSS.size() == 0) { cout << "ÊÎÌÏÐÅÑÑÎÐÍÛÅ ÑÒÀÍÖÈÈ ÎÒÑÓÒÑÒÂÓÞÒ\n"; }
+			if (KSS.size() == 0) { cout << "ÊÎÌÏÐÅÑÑÎÐÍÛÅ ÑÒÀÍÖÈÈ ÎÒÑÓÒÑÒÂÓÞÒ\n"; 
+			}
 			else {
 				cout << "ÊÎÌÏÐÅÑÑÎÐÍÛÅ ÑÒÀÍÖÈÈ\n";
 				for (const auto& K1 : KSS)
@@ -370,14 +375,24 @@ int main()
 		{
 			if (TRUBAS.size() == 0)  cout << "ÒÐÓÁÛ ÎÒÑÓÒÑÒÂÓÞÒ\n";
 			else
-				cout<<net.fordFulkerson(0, 5);
+			{
+				cout << "Ââåäèòå èñòîê\n";
+				int id1 = proves(KS::GetMaxID() - 1, 1);
+				cout << "Ââåäèòå ñòîê\n";
+				int id2 = proves(KS::GetMaxID() - 1, 1);
+				cout << "Ìàêñèìàëüíûé ïîòîê = " << net.fordFulkerson(id1-1, id2-1);
+			}
 			break;
 		}
 		case 18:
 		{
 			if (TRUBAS.size() == 0)  cout << "ÒÐÓÁÛ ÎÒÑÓÒÑÒÂÓÞÒ\n";
 			else
-				net.dijkstra(1);
+			{
+				cout << "Ââåäèòå id âåðøèíû - íà÷àëà ïóòè\n";
+				int id = proves(KS::GetMaxID() - 1, 1);
+				net.dijkstra(id-1);
+			}
 			break;
 		}
 		return 0;
